@@ -18,6 +18,8 @@ public:
     ~MainWindow();
 
 private:
+    void gridSetup();
+    QString loadInstructions(const QString &filePath);
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
