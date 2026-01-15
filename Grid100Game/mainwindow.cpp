@@ -6,7 +6,6 @@
 #include <QIcon>
 #include <QLabel>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -31,7 +30,7 @@ void MainWindow::gridSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
 
-    // Create instructions button
+    // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
     // Set Icon
     instructionsButton->setIcon(QIcon(":/icons/Instructions.png"));
@@ -46,8 +45,10 @@ void MainWindow::gridSetup()
         QMessageBox::information(this, "Game Instructions", text);
     });
 
+    // ============ Create a grid layout ============
+    // Initialize cells list
+    cellButtons.resize(10, std::vector<QPushButton*>(10, nullptr));
 
-    // Create a grid layout on the central widget
     QWidget *boardWidget = new QWidget(ui->centralwidget);
     QGridLayout *gridLayout = new QGridLayout(boardWidget);
 
@@ -59,20 +60,29 @@ void MainWindow::gridSetup()
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     // Create 10×10 cells
-    for (int row = 0; row < 10; row++) {
-        for (int col = 0; col < 10; col++) {
+    for (int row = 0; row < 10; row++)
+    {
+        for (int col = 0; col < 10; col++)
+        {
             // Create cell
-            QLabel *cell = new QLabel(this);
+            QPushButton *cell = new QPushButton(this);
+            cellButtons[row][col] = cell;
+
             // Set size and style
             cell->setFixedSize(32, 32);
-            cell->setAlignment(Qt::AlignCenter);
+            // cell->setAlignment(Qt::AlignCenter);
             cell->setStyleSheet(
-                "QLabel {"
+                "QPushButton {"
                 "border: 1px solid #555;"
                 "margin: 0px;"
                 "padding: 0px;"
                 "}"
                 );
+
+            // Connect button
+            connect(cell, &QPushButton::clicked, this, [=]() {
+                onCellClicked(row, col);
+            });
 
             // Add cell to grid
             gridLayout->addWidget(cell, row, col);
@@ -84,6 +94,62 @@ void MainWindow::gridSetup()
     this->adjustSize();
     this->setFixedSize(this->size());
 }
+
+void MainWindow::onCellClicked(int row, int col)
+{
+    QPoint pos(row, col);
+
+    // Get Legal moves
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+
+    // Check if cell is a legal move
+    bool isLegal = false;
+    for(const auto move : legalMoves)
+    {
+        if(move.x() == row && move.y() == col)
+        {
+            isLegal = true;
+            break;
+        }
+    }
+
+    if(!isLegal && gameState.getCurrentNumber() != 1)
+    {
+        return;
+    }
+
+    gameState.placeNumber(pos);
+    updateGridUI();
+    // resetHighlightedCells();
+    // highlightLegalMoves();
+    // checkGameOver();
+}
+
+void MainWindow::updateGridUI()
+{
+    // Iterate over grid
+    for (int row = 0; row < 10; ++row) {
+        for (int col = 0; col < 10; ++col) {
+            int value = gameState.grid[row][col];
+
+            if (value == 0)
+            {
+                cellButtons[row][col]->setText("");
+            }
+            else
+            {
+                cellButtons[row][col]->setText(QString::number(value));
+                cellButtons[row][col]->setStyleSheet(
+                    "QPushButton {"
+                    "background-color: #D3D3D3;"
+                    "border: 1px solid #555;"
+                    "}"
+                    );
+            }
+        }
+    }
+}
+
 
 MainWindow::~MainWindow()
 {
