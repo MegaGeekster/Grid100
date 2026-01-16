@@ -16,6 +16,9 @@ Windows-compatible release with embedded icons and resources
 4. Use the Restart button to start a new game.
 5. Click Instructions for a reminder of the rules.
 
+<img width="521" height="661" alt="image" src="https://github.com/user-attachments/assets/c72c75b8-6390-45cd-b48a-1dd0b72d1246" />
+
+
 # Building from Source
 Clone the repository:
 ```
