@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>data/Instructions.txt</file>
         <file>icons/Instructions.png</file>
+        <file>icons/Game.ico</file>
     </qresource>
 </RCC>

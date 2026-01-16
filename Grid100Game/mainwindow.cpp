@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // Configure the window
+    this->setWindowIcon(QIcon(":/icons/Game.ico"));
+    this->setWindowTitle("Grid100");
 
     gameState.reset();
     gridSetup();
