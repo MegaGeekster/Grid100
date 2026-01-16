@@ -179,6 +179,7 @@ void MainWindow::checkGameOver()
 
     std::pair<QString, QString> text = {"", ""};
 
+    // If won the game
     if(gameState.getCurrentNumber() > 100)
     {
         gameState.gameOver = true;
@@ -189,6 +190,7 @@ void MainWindow::checkGameOver()
     }
 
     std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    // If no more legal moves
     if(legalMoves.empty())
     {
         gameState.gameOver = true;
@@ -198,10 +200,13 @@ void MainWindow::checkGameOver()
         text.second = "No more legal moves.\nGame over!";
     }
 
+    // If game is not over, do nothing
     if(!gameState.gameOver)
     {
         return;
     }
+
+    // Set game over dialog
     QMessageBox msg(this);
     msg.setWindowTitle(text.first);
     msg.setText(text.second);
@@ -220,6 +225,7 @@ void MainWindow::checkGameOver()
     }
     else if (msg.clickedButton() == exitBtn)
     {
+        forceExit = true;
         this->close();
     }
 }
@@ -279,7 +285,14 @@ void MainWindow::updateGridUI()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // If game over, don't ask for conformation
+    if (forceExit)
+    {
+        event->accept();
+        return;
+    }
 
+    // Set dialog
     QMessageBox msg(this);
     msg.setWindowTitle("Exit Game");
     msg.setText("Are you sure you want to exit?");

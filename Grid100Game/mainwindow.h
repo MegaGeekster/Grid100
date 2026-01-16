@@ -34,5 +34,6 @@ private:
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;
+    bool forceExit = false;
 };
 #endif // MAINWINDOW_H
