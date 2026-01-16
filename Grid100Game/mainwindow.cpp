@@ -27,7 +27,9 @@ QString MainWindow::loadInstructions(const QString &filePath)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         return "Oops, we can't seem to find the instructions, you'll just have to figure it out";
+    }
 
     QTextStream in(&file);
     return in.readAll();
@@ -43,14 +45,47 @@ void MainWindow::gridSetup()
     instructionsButton->setIcon(QIcon(":/icons/Instructions.png"));
     instructionsButton->setIconSize(QSize(24, 24));
 
-    // Place instructions button
-    mainLayout->addWidget(instructionsButton, 0, Qt::AlignRight);
-
     // Connect instructions button
     connect(instructionsButton, &QPushButton::clicked, this, [=](){
         QString text = loadInstructions(":/data/Instructions.txt");
         QMessageBox::information(this, "Game Instructions", text);
     });
+
+    // ============ Create restart button ============
+    QPushButton *restartButton = new QPushButton(this);
+    // Set Icon
+    restartButton->setIcon(QIcon(":/icons/Restart.png"));
+    restartButton->setIconSize(QSize(24,24));
+
+    // Connect reset Button
+    connect(restartButton, &QPushButton::clicked, this, [=](){
+        QMessageBox msg(this);
+        msg.setWindowTitle("Restart Game");
+        msg.setText("Are you sure you want to restart the game?");
+        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msg.setDefaultButton(QMessageBox::No);
+        msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+
+        if (msg.exec() == QMessageBox::Yes) {
+            restartGame();
+        }
+    });
+
+    // ============ Top bar layout ============
+    QHBoxLayout *topBarLayout = new QHBoxLayout();
+
+    // Push buttons to the right
+    topBarLayout->addStretch();
+
+    // Add buttons
+    topBarLayout->addWidget(restartButton);
+    topBarLayout->addWidget(instructionsButton);
+
+    // Small spacing between buttons
+    topBarLayout->setSpacing(6);
+
+    // Add top bar to main layout
+    mainLayout->addLayout(topBarLayout);
 
     // ============ Create a grid layout ============
     // Initialize cells list
@@ -180,6 +215,12 @@ void MainWindow::highlightLegalMoves()
             "}"
             );
     }
+}
+
+void MainWindow::restartGame()
+{
+    gameState.reset();
+    updateGridUI();
 }
 
 void MainWindow::updateGridUI()

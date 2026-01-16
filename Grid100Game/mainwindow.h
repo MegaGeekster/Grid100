@@ -26,6 +26,7 @@ private:
     void updateGridUI();
     void highlightLegalMoves();
     void checkGameOver();
+    void restartGame();
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;
