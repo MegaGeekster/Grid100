@@ -29,6 +29,3 @@ cd Grid100
 Open the project in Qt Creator.
 Build in Release mode.
 Use windeployqt on the release EXE to prepare a distributable folder.
-
-# License
-This project is MIT licensed — free to use and modify.
