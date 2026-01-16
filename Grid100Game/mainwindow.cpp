@@ -254,6 +254,25 @@ void MainWindow::updateGridUI()
     }
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+
+    QMessageBox msg(this);
+    msg.setWindowTitle("Exit Game");
+    msg.setText("Are you sure you want to exit?");
+    msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msg.setDefaultButton(QMessageBox::No);
+    msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+
+    if (msg.exec() == QMessageBox::Yes)
+    {
+        event->accept();   // allow closing
+    }
+    else
+    {
+        event->ignore();   // cancel closing
+    }
+}
 
 MainWindow::~MainWindow()
 {

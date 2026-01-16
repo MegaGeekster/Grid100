@@ -4,6 +4,8 @@
 #include "GameState.h"
 #include <QMainWindow>
 #include <QPushButton>
+#include <QCloseEvent>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +29,8 @@ private:
     void highlightLegalMoves();
     void checkGameOver();
     void restartGame();
+    void closeEvent(QCloseEvent *event) override;
+
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;
