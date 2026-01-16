@@ -76,4 +76,5 @@ void GameState::reset()
     grid.assign(10, std::vector<int>(10, 0));
     currentNumber = 1;
     hasStarted = false;
+    gameOver = false;
 }

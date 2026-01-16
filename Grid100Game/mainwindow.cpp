@@ -177,27 +177,50 @@ void MainWindow::checkGameOver()
         return;
     }
 
+    std::pair<QString, QString> text = {"", ""};
+
     if(gameState.getCurrentNumber() > 100)
     {
         gameState.gameOver = true;
-
-        QMessageBox::information(
-            this,
-            "You Won!",
-            "You did it!.\nUnbelievable!"
-            );
+        // Title
+        text.first = "You Won!";
+        // Message
+        text.second = "You did it!.\nUnbelievable!";
     }
 
     std::vector<QPoint> legalMoves = gameState.getLegalMoves();
     if(legalMoves.empty())
     {
         gameState.gameOver = true;
+        // Title
+        text.first = "Game Over";
+        // Message
+        text.second = "No more legal moves.\nGame over!";
+    }
 
-        QMessageBox::information(
-            this,
-            "Game Over",
-            "No more legal moves.\nGame over!"
-            );
+    if(!gameState.gameOver)
+    {
+        return;
+    }
+    QMessageBox msg(this);
+    msg.setWindowTitle(text.first);
+    msg.setText(text.second);
+    msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+
+    QPushButton *restartBtn = msg.addButton("Restart", QMessageBox::AcceptRole);
+    QPushButton *exitBtn = msg.addButton("Exit", QMessageBox::RejectRole);
+
+    msg.setDefaultButton(restartBtn);
+
+    msg.exec();
+
+    if (msg.clickedButton() == restartBtn)
+    {
+        restartGame();
+    }
+    else if (msg.clickedButton() == exitBtn)
+    {
+        this->close();
     }
 }
 
