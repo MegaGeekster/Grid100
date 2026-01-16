@@ -24,6 +24,8 @@ private:
     QString loadInstructions(const QString &filePath);
     void onCellClicked(int row, int col);
     void updateGridUI();
+    void highlightLegalMoves();
+    void checkGameOver();
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;

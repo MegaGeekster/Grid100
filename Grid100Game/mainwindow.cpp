@@ -13,7 +13,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    gameState.reset();
     gridSetup();
+    updateGridUI();
+    highlightLegalMoves();
 }
 
 QString MainWindow::loadInstructions(const QString &filePath)
@@ -89,7 +93,6 @@ void MainWindow::gridSetup()
         }
     }
 
-    ui->centralwidget->setLayout(gridLayout);
     // Set window size to grid size
     this->adjustSize();
     this->setFixedSize(this->size());
@@ -97,6 +100,11 @@ void MainWindow::gridSetup()
 
 void MainWindow::onCellClicked(int row, int col)
 {
+    if (gameState.gameOver)
+    {
+        return;
+    }
+
     QPoint pos(row, col);
 
     // Get Legal moves
@@ -120,9 +128,55 @@ void MainWindow::onCellClicked(int row, int col)
 
     gameState.placeNumber(pos);
     updateGridUI();
-    // resetHighlightedCells();
-    // highlightLegalMoves();
-    // checkGameOver();
+    highlightLegalMoves();
+    checkGameOver();
+}
+
+void MainWindow::checkGameOver()
+{
+    if(!gameState.hasStarted)
+    {
+        return;
+    }
+
+    if(gameState.getCurrentNumber() > 100)
+    {
+        gameState.gameOver = true;
+
+        QMessageBox::information(
+            this,
+            "You Won!",
+            "You did it!.\nUnbelievable!"
+            );
+    }
+
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    if(legalMoves.empty())
+    {
+        gameState.gameOver = true;
+
+        QMessageBox::information(
+            this,
+            "Game Over",
+            "No more legal moves.\nGame over!"
+            );
+    }
+}
+
+void MainWindow::highlightLegalMoves()
+{
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    for(const auto move : legalMoves)
+    {
+        int r = move.x();
+        int c = move.y();
+        cellButtons[r][c]->setStyleSheet(
+            "QPushButton {"
+            "background-color: #ADD8E6;"
+            "border: 1px solid #555;"
+            "}"
+            );
+    }
 }
 
 void MainWindow::updateGridUI()
@@ -135,6 +189,12 @@ void MainWindow::updateGridUI()
             if (value == 0)
             {
                 cellButtons[row][col]->setText("");
+                cellButtons[row][col]->setStyleSheet(
+                    "QPushButton {"
+                    "background-color: none;"
+                    "border: 1px solid #555;"
+                    "}"
+                    );
             }
             else
             {

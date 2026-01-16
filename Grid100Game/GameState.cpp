@@ -27,7 +27,7 @@ std::vector<QPoint> GameState::getLegalMoves()
         int32_t y = currentPos.y() + move.y();
 
         // Validate bounds
-        if(x > 0 || y > 0 || x < grid.size() || y < grid.size())
+        if(x >= 0 && y >= 0 && x < grid.size() && y < grid.size() && grid[x][y] == 0)
         {
             nextMoves.push_back(QPoint{x, y});
         }
@@ -38,6 +38,10 @@ std::vector<QPoint> GameState::getLegalMoves()
 
 bool GameState::placeNumber(QPoint pos)
 {
+    if (!hasStarted)
+    {
+        hasStarted = true;
+    }
     // Set and update number
     grid[pos.x()][pos.y()] = currentNumber;
     currentNumber++;
@@ -65,4 +69,11 @@ bool GameState::isGameOver()
     }
 
     return false;
+}
+
+void GameState::reset()
+{
+    grid.assign(10, std::vector<int>(10, 0));
+    currentNumber = 1;
+    hasStarted = false;
 }

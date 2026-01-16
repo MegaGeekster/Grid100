@@ -19,6 +19,10 @@ public:
     std::vector<QPoint> getLegalMoves();
     bool placeNumber(QPoint pos);
     bool isGameOver();
+    void reset();
+
+    bool gameOver = false;
+    bool hasStarted;
 
 private:
     int currentNumber; // Next number to place
