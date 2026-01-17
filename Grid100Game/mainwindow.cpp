@@ -179,8 +179,8 @@ void MainWindow::onCellClicked(int row, int col)
     gameState.placeNumber(pos);
     updateGridUI();
     highlightLegalMoves();
-    checkGameOver();
     moveHistory.push_back(pos);
+    checkGameOver();
 }
 
 void MainWindow::checkGameOver()
@@ -237,7 +237,8 @@ void MainWindow::checkGameOver()
 
     if(msg.clickedButton() == undoBtn)
     {
-
+        gameState.gameOver = false;
+        undoLastMove();
     }
     else if (msg.clickedButton() == restartBtn)
     {
