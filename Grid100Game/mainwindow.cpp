@@ -197,7 +197,8 @@ void MainWindow::checkGameOver()
         // Title
         text.first = "Game Over";
         // Message
-        text.second = "No more legal moves.\nGame over!";
+        text.second = text.second = QString("You reached <b>%1</b>!<br>No more legal moves.</br><br>Game over!</br>")
+                                        .arg(gameState.getCurrentNumber() - 1);;
     }
 
     // If game is not over, do nothing
