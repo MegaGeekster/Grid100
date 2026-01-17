@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void undoLastMove();
     ~MainWindow();
 
 private:
@@ -30,10 +31,14 @@ private:
     void checkGameOver();
     void restartGame();
     void closeEvent(QCloseEvent *event) override;
+    void set0GridButton(const QPoint point);
+    void resetGridButton(const QPoint point);
 
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;
     bool forceExit = false;
+
+    std::vector<QPoint> moveHistory;
 };
 #endif // MAINWINDOW_H

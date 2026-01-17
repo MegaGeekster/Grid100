@@ -36,7 +36,7 @@ std::vector<QPoint> GameState::getLegalMoves()
     return nextMoves;
 }
 
-bool GameState::placeNumber(QPoint pos)
+bool GameState::placeNumber(const QPoint &pos)
 {
     if (!hasStarted)
     {
@@ -77,4 +77,13 @@ void GameState::reset()
     currentNumber = 1;
     hasStarted = false;
     gameOver = false;
+}
+
+void GameState::undoLastMove(const QPoint &lastPosition, const QPoint &newPosition)
+{
+    grid[lastPosition.x()][lastPosition.y()] = 0;
+    // Set current number to last number
+    currentNumber--;
+    // Set current position to previous position
+    currentPos = newPosition;
 }
