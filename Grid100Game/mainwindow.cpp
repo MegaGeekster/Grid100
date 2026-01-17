@@ -41,7 +41,7 @@ void MainWindow::gridSetup()
 
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
-    // Set Icon
+    // Set icon
     instructionsButton->setIcon(QIcon(":/icons/Instructions.png"));
     instructionsButton->setIconSize(QSize(24, 24));
 
@@ -53,7 +53,7 @@ void MainWindow::gridSetup()
 
     // ============ Create restart button ============
     QPushButton *restartButton = new QPushButton(this);
-    // Set Icon
+    // Set icon
     restartButton->setIcon(QIcon(":/icons/Restart.png"));
     restartButton->setIconSize(QSize(24,24));
 
@@ -71,6 +71,17 @@ void MainWindow::gridSetup()
         }
     });
 
+    // ============ Create undo button ============
+    QPushButton *undoButton = new QPushButton(this);
+    // Set icon
+    undoButton->setIcon(QIcon(":/icons/Undo.png"));
+    undoButton->setIconSize(QSize(24,24));
+
+    // Connect undo button
+    connect(undoButton, &QPushButton::clicked, this, [=](){
+        undoLastMove();
+    });
+
     // ============ Top bar layout ============
     QHBoxLayout *topBarLayout = new QHBoxLayout();
 
@@ -78,6 +89,7 @@ void MainWindow::gridSetup()
     topBarLayout->addStretch();
 
     // Add buttons
+    topBarLayout->addWidget(undoButton);
     topBarLayout->addWidget(restartButton);
     topBarLayout->addWidget(instructionsButton);
 
@@ -168,6 +180,7 @@ void MainWindow::onCellClicked(int row, int col)
     updateGridUI();
     highlightLegalMoves();
     checkGameOver();
+    moveHistory.push_back(pos);
 }
 
 void MainWindow::checkGameOver()
@@ -253,6 +266,17 @@ void MainWindow::restartGame()
     updateGridUI();
 }
 
+void MainWindow::set0GridButton(const QPoint point)
+{
+    cellButtons[point.x()][point.y()]->setText("");
+    cellButtons[point.x()][point.y()]->setStyleSheet(
+        "QPushButton {"
+        "background-color: none;"
+        "border: 1px solid #555;"
+        "}"
+        );
+}
+
 void MainWindow::updateGridUI()
 {
     // Iterate over grid
@@ -262,13 +286,7 @@ void MainWindow::updateGridUI()
 
             if (value == 0)
             {
-                cellButtons[row][col]->setText("");
-                cellButtons[row][col]->setStyleSheet(
-                    "QPushButton {"
-                    "background-color: none;"
-                    "border: 1px solid #555;"
-                    "}"
-                    );
+                set0GridButton(QPoint{row, col});
             }
             else
             {
@@ -309,6 +327,30 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         event->ignore();   // cancel closing
     }
+}
+
+void MainWindow::undoLastMove()
+{
+    if(!gameState.hasStarted || moveHistory.empty())
+    {
+        return;
+    }
+
+    // Get last move
+    QPoint lastPos = moveHistory.back();
+    moveHistory.pop_back();
+
+    // Get new current position
+    QPoint newPos = moveHistory.empty() ? QPoint{-1, -1} : moveHistory.back();
+
+    // Handle game state undo
+    gameState.undoLastMove(lastPos, newPos);
+
+    // Reset grid
+    updateGridUI();
+
+    // Highlight legal moves for new position
+    highlightLegalMoves();
 }
 
 MainWindow::~MainWindow()

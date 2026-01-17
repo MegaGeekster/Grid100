@@ -17,9 +17,11 @@ public:
     GameState();
 
     std::vector<QPoint> getLegalMoves();
-    bool placeNumber(QPoint pos);
+    bool placeNumber(const QPoint &pos);
     bool isGameOver();
     void reset();
+
+    void undoLastMove(const QPoint &lastPosition, const QPoint &newPosition);
 
     bool gameOver = false;
     bool hasStarted;
