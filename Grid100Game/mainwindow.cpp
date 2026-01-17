@@ -179,8 +179,8 @@ void MainWindow::onCellClicked(int row, int col)
     gameState.placeNumber(pos);
     updateGridUI();
     highlightLegalMoves();
-    checkGameOver();
     moveHistory.push_back(pos);
+    checkGameOver();
 }
 
 void MainWindow::checkGameOver()
@@ -226,14 +226,21 @@ void MainWindow::checkGameOver()
     msg.setText(text.second);
     msg.setWindowIcon(QIcon(":/icons/Game.ico"));
 
+    QPushButton *undoBtn = msg.addButton("Undo Last Move", QMessageBox::AcceptRole);
     QPushButton *restartBtn = msg.addButton("Restart", QMessageBox::AcceptRole);
     QPushButton *exitBtn = msg.addButton("Exit", QMessageBox::RejectRole);
 
-    msg.setDefaultButton(restartBtn);
+    msg.setDefaultButton(undoBtn);
 
     msg.exec();
 
-    if (msg.clickedButton() == restartBtn)
+
+    if(msg.clickedButton() == undoBtn)
+    {
+        gameState.gameOver = false;
+        undoLastMove();
+    }
+    else if (msg.clickedButton() == restartBtn)
     {
         restartGame();
     }
