@@ -307,6 +307,19 @@ void MainWindow::updateGridUI()
             }
         }
     }
+
+    // Highlight current cell
+    if(!gameState.hasStarted)
+    {
+        return;
+    }
+    QPoint currentCell = gameState.getCurrentPos();
+    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(
+        "QPushButton {"
+        "background-color: #D5FFFF;"
+        "border: 1px solid #555;"
+        "}"
+        );
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
