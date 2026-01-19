@@ -59,6 +59,10 @@ void MainWindow::gridSetup()
 
     // Connect reset Button
     connect(restartButton, &QPushButton::clicked, this, [=](){
+        if(!gameState.hasStarted)
+        {
+            return;
+        }
         QMessageBox msg(this);
         msg.setWindowTitle("Restart Game");
         msg.setText("Are you sure you want to restart the game?");
@@ -233,7 +237,6 @@ void MainWindow::checkGameOver()
     msg.setDefaultButton(undoBtn);
 
     msg.exec();
-
 
     if(msg.clickedButton() == undoBtn)
     {
