@@ -29,3 +29,8 @@ RESOURCES += \
     resources.qrc
 
 RC_FILE = resources.rc
+
+# Detect if Qt is static
+contains(QT_CONFIG, static) {
+    QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
+}
