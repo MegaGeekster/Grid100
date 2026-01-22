@@ -2,21 +2,21 @@
 Grid100 is a fun 10×10 number puzzle game built with C++ and Qt. The goal is to fill the grid consecutively with numbers from 1 to 100 following specific movement rules.
 
 # Features
-10×10 interactive grid with clickable cells
-Highlights legal moves for the next number
-Restart button with confirmation dialog
-Instructions button showing gameplay rules
-Game-over detection with user-friendly message
-Windows-compatible release with embedded icons and resources
+- 10×10 interactive grid with clickable cells
+- Highlights legal moves for the next number
+- Restart button with confirmation dialog
+- Instructions button showing gameplay rules
+- Game-over detection with user-friendly message
+- Windows-compatible release with embedded icons and resources
 
 # Gameplay
 1. The game starts with number 1.
-2. You can place the next number in a cell that is a legal move (highlighted in light blue).
+2. You can place the next number in a cell that is a legal move (highlighted in light blue, skipping two cells streight and skipping one cell diagnolly).
 3. Continue until you reach 100 or no legal moves remain.
 4. Use the Restart button to start a new game.
 5. Click Instructions for a reminder of the rules.
 
-<img width="521" height="661" alt="image" src="https://github.com/user-attachments/assets/c72c75b8-6390-45cd-b48a-1dd0b72d1246" />
+<img width="526" height="655" alt="image" src="https://github.com/user-attachments/assets/4bd7f702-88ec-4509-a581-f1e619f1dc39" />
 
 
 # Building from Source
