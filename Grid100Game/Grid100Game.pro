@@ -8,6 +8,24 @@ CONFIG += c++17 release
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+# Static build
+contains(QT_CONFIG, static) {
+    message("Configuring for STATIC Qt build")
+    CONFIG += static
+
+    # Link MinGW runtime statically (if using MinGW)
+    QMAKE_CXXFLAGS_RELEASE += -static -static-libgcc -static-libstdc++
+    QMAKE_LFLAGS_RELEASE += -static -static-libgcc -static-libstdc++
+
+    # Include static platform plugin
+    QTPLUGIN += qwindows
+    CONFIG += qt plugin
+}
+else {
+    message("Configuring for DYNAMIC Qt build")
+    # Dynamic build: nothing extra needed
+}
+
 SOURCES += \
     GameState.cpp \
     main.cpp \
