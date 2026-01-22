@@ -39,6 +39,14 @@ void MainWindow::gridSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
 
+    // ============ Create settings button ============
+    QPushButton *settingsButton = new QPushButton(this);
+    //set icon
+    settingsButton->setIcon(QIcon(":/icons/Settings.png"));
+    settingsButton->setIconSize(QSize(24, 24));
+
+
+
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
     // Set icon
@@ -88,6 +96,9 @@ void MainWindow::gridSetup()
 
     // ============ Top bar layout ============
     QHBoxLayout *topBarLayout = new QHBoxLayout();
+
+    // Add Settings button on the top left
+    topBarLayout->addWidget(settingsButton);
 
     // Push buttons to the right
     topBarLayout->addStretch();

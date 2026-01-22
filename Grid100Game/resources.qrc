@@ -5,5 +5,6 @@
         <file>icons/Game.ico</file>
         <file>icons/Restart.png</file>
         <file>icons/Undo.png</file>
+        <file>icons/Settings.png</file>
     </qresource>
 </RCC>
