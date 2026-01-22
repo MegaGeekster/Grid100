@@ -29,14 +29,17 @@ else {
 SOURCES += \
     GameState.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
     GameState.h \
-    mainwindow.h
+    mainwindow.h \
+    settingsdialog.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    settingsdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
