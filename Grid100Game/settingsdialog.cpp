@@ -6,6 +6,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     , ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/icons/Game.ico"));
+    this->setWindowTitle("Settings");
 }
 
 SettingsDialog::~SettingsDialog()
