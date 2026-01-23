@@ -119,7 +119,8 @@ void MainWindow::gridSetup()
 
     // ============ Create a grid layout ============
     // Initialize cells list
-    cellButtons.resize(10, std::vector<QPushButton*>(10, nullptr));
+    const int gridSize = gameState.getGridSize();
+    cellButtons.resize(gridSize, std::vector<QPushButton*>(gridSize, nullptr));
 
     QWidget *boardWidget = new QWidget(ui->centralwidget);
     QGridLayout *gridLayout = new QGridLayout(boardWidget);
@@ -131,10 +132,10 @@ void MainWindow::gridSetup()
     mainLayout->addWidget(boardWidget, 0, Qt::AlignCenter);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    // Create 10×10 cells
-    for (int row = 0; row < 10; row++)
+    // Create cells
+    for (int row = 0; row < gridSize; row++)
     {
-        for (int col = 0; col < 10; col++)
+        for (int col = 0; col < gridSize; col++)
         {
             // Create cell
             QPushButton *cell = new QPushButton(this);
@@ -209,9 +210,10 @@ void MainWindow::checkGameOver()
     }
 
     std::pair<QString, QString> text = {"", ""};
+    int finalNumber = gameState.getGridSize() * gameState.getGridSize();
 
     // If won the game
-    if(gameState.getCurrentNumber() > 100)
+    if(gameState.getCurrentNumber() > finalNumber)
     {
         gameState.gameOver = true;
         // Title
@@ -304,8 +306,8 @@ void MainWindow::set0GridButton(const QPoint point)
 void MainWindow::updateGridUI()
 {
     // Iterate over grid
-    for (int row = 0; row < 10; ++row) {
-        for (int col = 0; col < 10; ++col) {
+    for (int row = 0; row < gameState.getGridSize(); row++) {
+        for (int col = 0; col < gameState.getGridSize(); col++) {
             int value = gameState.grid[row][col];
 
             if (value == 0)
