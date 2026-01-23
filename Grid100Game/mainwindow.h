@@ -33,6 +33,7 @@ private:
     void closeEvent(QCloseEvent *event) override;
     void set0GridButton(const QPoint point);
     void resetGridButton(const QPoint point);
+    void openSettings();
 
     Ui::MainWindow *ui;
     GameState gameState;

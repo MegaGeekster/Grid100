@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTextStream>
+#include "settingsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,6 +39,16 @@ QString MainWindow::loadInstructions(const QString &filePath)
 void MainWindow::gridSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
+
+    // ============ Configure settings button ============
+    QPushButton *settingsButton = new QPushButton(this);
+    // Set icon
+    settingsButton->setIcon(QIcon(":/icons/Settings.png"));
+    settingsButton->setIconSize(QSize(24, 24));
+
+    // Connect settings button
+    connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
+
 
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
@@ -88,6 +99,9 @@ void MainWindow::gridSetup()
 
     // ============ Top bar layout ============
     QHBoxLayout *topBarLayout = new QHBoxLayout();
+
+    // Add Settings button on the top left
+    topBarLayout->addWidget(settingsButton);
 
     // Push buttons to the right
     topBarLayout->addStretch();
@@ -375,6 +389,13 @@ void MainWindow::undoLastMove()
     // Highlight legal moves for new position
     highlightLegalMoves();
 }
+
+void MainWindow::openSettings()
+{
+    SettingsDialog dlg(this);
+    dlg.exec();
+}
+
 
 MainWindow::~MainWindow()
 {
