@@ -394,7 +394,7 @@ void MainWindow::undoLastMove()
 
 void MainWindow::openSettings()
 {
-    SettingsDialog dlg(this);
+    SettingsDialog dlg(gameState.getGridSize(), this);
     dlg.exec();
 }
 
