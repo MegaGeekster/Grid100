@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <unordered_map>
+#include <QComboBox>
 
 namespace Ui {
 class SettingsDialog;
@@ -14,10 +15,14 @@ class SettingsDialog : public QDialog
 
 public:
     explicit SettingsDialog(int const currentGridSize, QWidget *parent = nullptr);
+    int getSelecteGridSize() {return selectedGridSize;}
     ~SettingsDialog();
 
 private:
     void windowSetup();
+    void accept() override;
+
+    QComboBox* gridSizeCombo;
     std::unordered_map<QString, int> gridSizeOptions{
         {"8x8", 8},
         {"9x9", 9},
@@ -27,6 +32,7 @@ private:
     };
 
     int currentGridSize;
+    int selectedGridSize;
     Ui::SettingsDialog *ui;
 };
 

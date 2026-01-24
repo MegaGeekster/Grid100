@@ -1,4 +1,5 @@
 #include "GameState.h"
+
 GameState::GameState()
     : currentNumber(1)
     , gridSize(10)

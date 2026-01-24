@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QCloseEvent>
+#include <QGridLayout>
 
 
 QT_BEGIN_NAMESPACE
@@ -34,11 +35,15 @@ private:
     void set0GridButton(const QPoint point);
     void resetGridButton(const QPoint point);
     void openSettings();
+    void handleGridSize(const int selectedGridSize);
+    void createGridButtons();
 
     Ui::MainWindow *ui;
     GameState gameState;
     std::vector<std::vector<QPushButton*>> cellButtons;
     bool forceExit = false;
+    QGridLayout *gridLayout;
+    QWidget *boardWidget;
 
     std::vector<QPoint> moveHistory;
 };

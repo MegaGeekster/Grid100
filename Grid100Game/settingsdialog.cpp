@@ -2,12 +2,12 @@
 #include "ui_settingsdialog.h"
 
 #include <QFormLayout>
-#include <QComboBox>
 
 SettingsDialog::SettingsDialog(const int currentGridSize, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::SettingsDialog)
     , currentGridSize(currentGridSize)
+    , selectedGridSize(currentGridSize)
 {
     ui->setupUi(this);
     this->setWindowIcon(QIcon(":/icons/Game.ico"));
@@ -24,7 +24,7 @@ void SettingsDialog::windowSetup()
     form->setLabelAlignment(Qt::AlignLeft);
     // ======= Display grid size options =======
     // Create dropdown
-    QComboBox *gridSizeCombo = new QComboBox(this);
+    gridSizeCombo = new QComboBox(this);
     for(const auto &option : gridSizeOptions)
     {
         gridSizeCombo->addItem(option.first, option.second);
@@ -39,6 +39,12 @@ void SettingsDialog::windowSetup()
     form->addRow("Grid size:", gridSizeCombo);
 
     ui->verticalLayout->insertLayout(0, form);
+}
+
+void SettingsDialog::accept()
+{
+    selectedGridSize = gridSizeCombo->currentData().toInt();
+    QDialog::accept();
 }
 
 SettingsDialog::~SettingsDialog()
