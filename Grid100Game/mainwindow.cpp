@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 
 #include <QFile>
-#include <QGridLayout>
 #include <QIcon>
 #include <QLabel>
 #include <QMessageBox>
@@ -48,7 +47,6 @@ void MainWindow::gridSetup()
 
     // Connect settings button
     connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
-
 
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
@@ -118,11 +116,8 @@ void MainWindow::gridSetup()
     mainLayout->addLayout(topBarLayout);
 
     // ============ Create a grid layout ============
-    // Initialize cells list
-    cellButtons.resize(10, std::vector<QPushButton*>(10, nullptr));
-
-    QWidget *boardWidget = new QWidget(ui->centralwidget);
-    QGridLayout *gridLayout = new QGridLayout(boardWidget);
+    boardWidget = new QWidget(ui->centralwidget);
+    gridLayout = new QGridLayout(boardWidget);
 
     // Samll spaces between cells
     gridLayout->setSpacing(3);
@@ -131,10 +126,33 @@ void MainWindow::gridSetup()
     mainLayout->addWidget(boardWidget, 0, Qt::AlignCenter);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    // Create 10×10 cells
-    for (int row = 0; row < 10; row++)
+    createGridButtons();
+}
+
+void MainWindow::createGridButtons()
+{
+    // Delete old buttons
+    if(gridLayout)
     {
-        for (int col = 0; col < 10; col++)
+        QLayoutItem* child;
+        while ((child = gridLayout->takeAt(0)) != nullptr)
+        {
+            if(QWidget* widget = child->widget()) {
+                widget->deleteLater();  // safely delete old buttons
+            }
+            delete child;
+        }
+    }
+
+    // Initialize cells list
+    const int gridSize = gameState.getGridSize();
+    cellButtons.clear();
+    cellButtons.resize(gridSize, std::vector<QPushButton*>(gridSize, nullptr));
+
+    // Create cells
+    for (int row = 0; row < gridSize; row++)
+    {
+        for (int col = 0; col < gridSize; col++)
         {
             // Create cell
             QPushButton *cell = new QPushButton(this);
@@ -160,10 +178,9 @@ void MainWindow::gridSetup()
             gridLayout->addWidget(cell, row, col);
         }
     }
-
-    // Set window size to grid size
+    ui->centralwidget->updateGeometry();
+    boardWidget->updateGeometry();
     this->adjustSize();
-    this->setFixedSize(this->size());
 }
 
 void MainWindow::onCellClicked(int row, int col)
@@ -209,9 +226,10 @@ void MainWindow::checkGameOver()
     }
 
     std::pair<QString, QString> text = {"", ""};
+    int finalNumber = gameState.getGridSize() * gameState.getGridSize();
 
     // If won the game
-    if(gameState.getCurrentNumber() > 100)
+    if(gameState.getCurrentNumber() > finalNumber)
     {
         gameState.gameOver = true;
         // Title
@@ -304,8 +322,10 @@ void MainWindow::set0GridButton(const QPoint point)
 void MainWindow::updateGridUI()
 {
     // Iterate over grid
-    for (int row = 0; row < 10; ++row) {
-        for (int col = 0; col < 10; ++col) {
+    for (int row = 0; row < gameState.getGridSize(); row++)
+    {
+        for (int col = 0; col < gameState.getGridSize(); col++)
+        {
             int value = gameState.grid[row][col];
 
             if (value == 0)
@@ -392,10 +412,28 @@ void MainWindow::undoLastMove()
 
 void MainWindow::openSettings()
 {
-    SettingsDialog dlg(this);
-    dlg.exec();
+    SettingsDialog dlg(gameState.getGridSize(), gameState.hasStarted, this);
+    if(dlg.exec() != QDialog::Accepted)
+    {
+        return;
+    }
+
+    // Handle grid size
+    int selectedGridSize = dlg.getSelecteGridSize();
+    handleGridSize(selectedGridSize);
 }
 
+void MainWindow::handleGridSize(const int selectedGridSize)
+{
+    if(selectedGridSize == gameState.getGridSize())
+    {
+        return;
+    }
+
+    gameState.setGridSize(selectedGridSize);
+    createGridButtons();
+    restartGame();
+}
 
 MainWindow::~MainWindow()
 {

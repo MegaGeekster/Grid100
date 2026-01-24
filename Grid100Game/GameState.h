@@ -14,6 +14,9 @@ public:
     void setCurrentPos(const QPoint &pos) {currentPos = pos;}
     QPoint getCurrentPos() {return currentPos;}
 
+    void setGridSize(const int size){gridSize = size;}
+    int getGridSize() {return gridSize;}
+
     GameState();
 
     std::vector<QPoint> getLegalMoves();
@@ -33,6 +36,7 @@ private:
         {3,0}, {-3,0}, {0,3}, {0,-3},
         {2,2}, {2,-2}, {-2,2}, {-2,-2}
     };
+    int gridSize;
 };
 
 #endif // GAMESTATE_H

@@ -1,12 +1,13 @@
 #include "GameState.h"
 
 GameState::GameState()
-    :currentNumber(1)
+    : currentNumber(1)
+    , gridSize(10)
 {
     // Initialize grid
-    grid.resize(10);
+    grid.resize(gridSize);
     for (auto &row : grid) {
-        row.resize(10, 0);
+        row.resize(gridSize, 0);
     }
 }
 
@@ -52,7 +53,8 @@ bool GameState::placeNumber(const QPoint &pos)
 
 bool GameState::isGameOver()
 {
-    if(currentNumber > 100)
+    int finalNumber = gridSize * gridSize;
+    if(currentNumber > finalNumber)
     {
         return true;
     }
@@ -73,7 +75,7 @@ bool GameState::isGameOver()
 
 void GameState::reset()
 {
-    grid.assign(10, std::vector<int>(10, 0));
+    grid.assign(gridSize, std::vector<int>(gridSize, 0));
     currentNumber = 1;
     hasStarted = false;
     gameOver = false;
