@@ -46,16 +46,21 @@ void SettingsDialog::windowSetup()
 
 void SettingsDialog::accept()
 {
+    // Get the chosen grid size
     selectedGridSize = gridSizeCombo->currentData().toInt();
+
+    // If grid size is changed and game is in progress, confirm the change
     if(currentGridSize != selectedGridSize && gameStarted)
     {
+        // Create confirmation window
         QMessageBox msg(this);
-        msg.setWindowTitle("Settings");
+        msg.setWindowTitle("Warning");
         msg.setText("Changing the window size will stop the current game.\nAre you sure you want to restart the game?");
         msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msg.setDefaultButton(QMessageBox::No);
         msg.setWindowIcon(QIcon(":/icons/Game.ico"));
 
+        // Cancle the change
         if(msg.exec() == QMessageBox::No)
         {
             selectedGridSize = currentGridSize;
