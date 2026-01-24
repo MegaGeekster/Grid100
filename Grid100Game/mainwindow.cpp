@@ -48,7 +48,6 @@ void MainWindow::gridSetup()
     // Connect settings button
     connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
 
-
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
     // Set icon

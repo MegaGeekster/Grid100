@@ -39,6 +39,7 @@ void SettingsDialog::windowSetup()
     form->addRow("Grid size:", gridSizeCombo);
 
     ui->verticalLayout->insertLayout(0, form);
+    adjustSize();
 }
 
 void SettingsDialog::accept()
