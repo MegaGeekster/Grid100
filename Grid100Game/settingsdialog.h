@@ -14,7 +14,7 @@ class SettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(int const currentGridSize, QWidget *parent = nullptr);
+    explicit SettingsDialog(const int currentGridSize, const bool gameStarted, QWidget *parent = nullptr);
     int getSelecteGridSize() {return selectedGridSize;}
     ~SettingsDialog();
 
@@ -33,6 +33,7 @@ private:
 
     int currentGridSize;
     int selectedGridSize;
+    bool gameStarted;
     Ui::SettingsDialog *ui;
 };
 

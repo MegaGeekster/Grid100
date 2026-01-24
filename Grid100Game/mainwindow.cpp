@@ -412,7 +412,7 @@ void MainWindow::undoLastMove()
 
 void MainWindow::openSettings()
 {
-    SettingsDialog dlg(gameState.getGridSize(), this);
+    SettingsDialog dlg(gameState.getGridSize(), gameState.hasStarted, this);
     if(dlg.exec() != QDialog::Accepted)
     {
         return;
