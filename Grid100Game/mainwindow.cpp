@@ -397,6 +397,12 @@ void MainWindow::undoLastMove()
     QPoint lastPos = moveHistory.back();
     moveHistory.pop_back();
 
+    // If no history, we are back at start of game
+    if(moveHistory.empty())
+    {
+        restartGame();
+        return;
+    }
     // Get new current position
     QPoint newPos = moveHistory.empty() ? QPoint{-1, -1} : moveHistory.back();
 
