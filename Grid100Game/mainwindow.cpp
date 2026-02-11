@@ -228,6 +228,7 @@ void MainWindow::checkGameOver()
     std::pair<QString, QString> text = {"", ""};
     int finalNumber = gameState.getGridSize() * gameState.getGridSize();
 
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
     // If won the game
     if(gameState.getCurrentNumber() > finalNumber)
     {
@@ -237,10 +238,8 @@ void MainWindow::checkGameOver()
         // Message
         text.second = "You did it!.\nUnbelievable!";
     }
-
-    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
     // If no more legal moves
-    if(legalMoves.empty())
+    else if(legalMoves.empty())
     {
         gameState.gameOver = true;
         // Title
