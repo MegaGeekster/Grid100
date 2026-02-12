@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QTextBrowser>
 #include "settingsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -422,22 +423,26 @@ void MainWindow::showInstructions()
 
     QVBoxLayout* layout = new QVBoxLayout(&dialog);
 
-    // Instructions text label
-    QLabel* instructionsText = new QLabel(&dialog);
-    instructionsText->setTextFormat(Qt::RichText);
-    instructionsText->setWordWrap(true);
+    // Text browser
+    QTextBrowser* browser = new QTextBrowser;
+    browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Load instructions from file
-    QString text = loadInstructions(":/data/Instructions.txt");
-    instructionsText->setText(text.replace("\n", "<br>"));
+    QString text = loadInstructions(":/data/Instructions.html");
+    browser->setHtml(text);
 
     // Close button
     QPushButton* closeButton = new QPushButton("Close", &dialog);
     connect(closeButton, &QPushButton::clicked, &dialog, &QDialog::accept);
 
     // Add to layout
-    layout->addWidget(instructionsText);
+    layout->addWidget(browser);
     layout->addWidget(closeButton, 0, Qt::AlignCenter);
+
+    // Open at 70% of screen size
+    QSize screenSize = dialog.screen()->availableGeometry().size();
+    dialog.resize(screenSize.width() * 0.7,
+                  screenSize.height() * 0.7);
 
     dialog.exec();
 }

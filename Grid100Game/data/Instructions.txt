@@ -1,4 +1,0 @@
-1. Fill the grid with numbers 1–100.
-2. You can move 3 cells straight or 2 cells diagonally.
-3. Click cells to place numbers.
-4. Game ends when 100 is reached or no moves left.
