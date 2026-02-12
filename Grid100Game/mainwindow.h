@@ -37,6 +37,7 @@ private:
     void openSettings();
     void handleGridSize(const int selectedGridSize);
     void createGridButtons();
+    void showInstructions();
 
     Ui::MainWindow *ui;
     GameState gameState;

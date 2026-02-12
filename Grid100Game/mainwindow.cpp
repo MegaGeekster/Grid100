@@ -55,10 +55,7 @@ void MainWindow::gridSetup()
     instructionsButton->setIconSize(QSize(24, 24));
 
     // Connect instructions button
-    connect(instructionsButton, &QPushButton::clicked, this, [=](){
-        QString text = loadInstructions(":/data/Instructions.txt");
-        QMessageBox::information(this, "Game Instructions", text);
-    });
+    connect(instructionsButton, &QPushButton::clicked, this, &MainWindow::showInstructions);
 
     // ============ Create restart button ============
     QPushButton *restartButton = new QPushButton(this);
@@ -413,6 +410,36 @@ void MainWindow::undoLastMove()
 
     // Highlight legal moves for new position
     highlightLegalMoves();
+}
+
+void MainWindow::showInstructions()
+{
+    // Create the instructions window
+    QDialog dialog(this);
+    dialog.setWindowTitle("Instructions");
+    dialog.setWindowIcon(QIcon(":/icons/Game.ico"));
+    dialog.setModal(true);
+
+    QVBoxLayout* layout = new QVBoxLayout(&dialog);
+
+    // Instructions text label
+    QLabel* instructionsText = new QLabel(&dialog);
+    instructionsText->setTextFormat(Qt::RichText);
+    instructionsText->setWordWrap(true);
+
+    // Load instructions from file
+    QString text = loadInstructions(":/data/Instructions.txt");
+    instructionsText->setText(text.replace("\n", "<br>"));
+
+    // Close button
+    QPushButton* closeButton = new QPushButton("Close", &dialog);
+    connect(closeButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    // Add to layout
+    layout->addWidget(instructionsText);
+    layout->addWidget(closeButton, 0, Qt::AlignCenter);
+
+    dialog.exec();
 }
 
 void MainWindow::openSettings()
