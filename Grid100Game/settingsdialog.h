@@ -33,6 +33,8 @@ private:
         {"Custom Size", -1}
     };
     QSpinBox* customSizeBox;
+    int const minGridSize;
+    int const maxGridSize;
 
     int currentGridSize;
     int selectedGridSize;

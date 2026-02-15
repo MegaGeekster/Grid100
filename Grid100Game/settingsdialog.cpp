@@ -10,6 +10,8 @@ SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted
     , currentGridSize(currentGridSize)
     , selectedGridSize(currentGridSize)
     , gameStarted(gameStarted)
+    , minGridSize(5)
+    , maxGridSize(25)
 {
     ui->setupUi(this);
     this->setWindowIcon(QIcon(":/icons/Game.ico"));
@@ -34,7 +36,6 @@ void SettingsDialog::windowSetup()
 
     // Create hidden input box for custom size
     customSizeBox = new QSpinBox(this);
-    customSizeBox->setRange(5, 25); //Range of allowed input size
     customSizeBox->setValue(currentGridSize);
 
     // Set default to current size
@@ -73,7 +74,21 @@ void SettingsDialog::accept()
 
     if(selectedGridSize == -1)
     {
-        selectedGridSize = customSizeBox->value();
+        int const value = customSizeBox->value();
+        // Validate custom size
+        if(value < minGridSize || value > maxGridSize)
+        {
+            QMessageBox::warning(
+                this,
+                "Invalid Size",
+                QString("Grid size must be between %1 and %2.")
+                    .arg(minGridSize)
+                    .arg(maxGridSize)
+                );
+            return; // Keep dialog open
+        }
+
+        selectedGridSize = value;
     }
 
     // If grid size is changed and game is in progress, confirm the change
