@@ -239,7 +239,7 @@ void MainWindow::checkGameOver()
     msg.setWindowIcon(QIcon(":/icons/Game.ico"));
 
     QPushButton *undoBtn = msg.addButton("Undo Last Move", QMessageBox::AcceptRole);
-    QPushButton *restartBtn = msg.addButton("Restart", QMessageBox::AcceptRole);
+    QPushButton *restartBtn = msg.addButton("New Game", QMessageBox::AcceptRole);
     QPushButton *exitBtn = msg.addButton("Exit", QMessageBox::RejectRole);
 
     msg.setDefaultButton(undoBtn);
