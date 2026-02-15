@@ -1,10 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>data/Instructions.txt</file>
         <file>icons/Instructions.png</file>
         <file>icons/Game.ico</file>
         <file>icons/Restart.png</file>
         <file>icons/Undo.png</file>
         <file>icons/Settings.png</file>
+        <file>data/Instructions.html</file>
+        <file>images/second_move.png</file>
+        <file>images/streight_move.png</file>
+        <file>images/diagonal_move.png</file>
     </qresource>
 </RCC>
