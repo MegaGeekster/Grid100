@@ -89,3 +89,54 @@ void GameState::undoLastMove(const QPoint &lastPosition, const QPoint &newPositi
     // Set current position to previous position
     currentPos = newPosition;
 }
+
+int GameState::calculatePercentage()
+{
+    int total = gridSize * gridSize;
+    int percentage = ((currentNumber - 1) * 100) / total;
+    return percentage;
+}
+
+std::pair<QString, QString> GameState::getGameOverMessage()
+{
+    std::pair<QString, QString> message = {"", ""};
+    int percentage = calculatePercentage();
+
+    // If won game
+    if(percentage == 100)
+    {
+        message.first = "You win!";
+        message.second = "Unbelievable! You won!\nCongratulations!";
+        return message;
+    }
+
+    QString textToAppend = "";
+    // Get message for percentage range
+    if(percentage < 50)
+    {
+        textToAppend = "Better luck next time...";
+    }
+    else if(percentage < 70)
+    {
+        textToAppend = "Getting there...";
+    }
+    else if(percentage < 85)
+    {
+        textToAppend = "Nice Job!";
+    }
+    else if(percentage < 95)
+    {
+        textToAppend = "Amazing!";
+    }
+    else if(percentage < 100)
+    {
+        textToAppend = "Incredible! You are really good at this!";
+    }
+
+    // Build message
+    message.first = "Game Over";
+    message.second = QString("No more moves left.<br>You reached <b>%1</b> (%2%).<br>").arg(currentNumber - 1).arg(percentage) + textToAppend;
+
+    return message;
+}
+
