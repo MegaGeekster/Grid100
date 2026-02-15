@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <unordered_map>
 #include <QComboBox>
+#include <QSpinBox>
 
 namespace Ui {
 class SettingsDialog;
@@ -28,8 +29,12 @@ private:
         {"9x9", 9},
         {"10x10", 10},
         {"15x15", 15},
-        {"20x20", 20}
+        {"20x20", 20},
+        {"Custom Size", -1}
     };
+    QSpinBox* customSizeBox;
+    int const minGridSize;
+    int const maxGridSize;
 
     int currentGridSize;
     int selectedGridSize;

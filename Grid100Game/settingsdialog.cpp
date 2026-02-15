@@ -10,6 +10,8 @@ SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted
     , currentGridSize(currentGridSize)
     , selectedGridSize(currentGridSize)
     , gameStarted(gameStarted)
+    , minGridSize(5)
+    , maxGridSize(25)
 {
     ui->setupUi(this);
     this->setWindowIcon(QIcon(":/icons/Game.ico"));
@@ -31,14 +33,35 @@ void SettingsDialog::windowSetup()
     {
         gridSizeCombo->addItem(option.first, option.second);
     }
+
+    // Create hidden input box for custom size
+    customSizeBox = new QSpinBox(this);
+    customSizeBox->setValue(currentGridSize);
+
     // Set default to current size
     int index = gridSizeCombo->findData(currentGridSize);
     if(index != -1)
     {
         gridSizeCombo->setCurrentIndex(index);
+        customSizeBox->hide();
     }
+
+    // Create layout for grid size options
+    QHBoxLayout* sizeLayout = new QHBoxLayout();
+    sizeLayout->addWidget(gridSizeCombo);
+    sizeLayout->addWidget(customSizeBox);
+
     // Create row
-    form->addRow("Grid size:", gridSizeCombo);
+    form->addRow("Grid size:", sizeLayout);
+
+    // Connect the hidden box
+    connect(gridSizeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this]() {
+        int value = gridSizeCombo->currentData().toInt();
+        bool isCustom = (value == -1);
+        customSizeBox->setVisible(isCustom);
+        adjustSize();
+    });
 
     ui->verticalLayout->insertLayout(0, form);
     adjustSize();
@@ -48,6 +71,25 @@ void SettingsDialog::accept()
 {
     // Get the chosen grid size
     selectedGridSize = gridSizeCombo->currentData().toInt();
+
+    if(selectedGridSize == -1)
+    {
+        int const value = customSizeBox->value();
+        // Validate custom size
+        if(value < minGridSize || value > maxGridSize)
+        {
+            QMessageBox::warning(
+                this,
+                "Invalid Size",
+                QString("Grid size must be between %1 and %2.")
+                    .arg(minGridSize)
+                    .arg(maxGridSize)
+                );
+            return; // Keep dialog open
+        }
+
+        selectedGridSize = value;
+    }
 
     // If grid size is changed and game is in progress, confirm the change
     if(currentGridSize != selectedGridSize && gameStarted)
