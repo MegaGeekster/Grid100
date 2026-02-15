@@ -6,8 +6,8 @@
         <file>icons/Undo.png</file>
         <file>icons/Settings.png</file>
         <file>data/Instructions.html</file>
-        <file>images/diagnal_move.png</file>
         <file>images/second_move.png</file>
         <file>images/streight_move.png</file>
+        <file>images/diagonal_move.png</file>
     </qresource>
 </RCC>
