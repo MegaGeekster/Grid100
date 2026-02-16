@@ -9,6 +9,7 @@
 #include <QTextBrowser>
 #include "settingsdialog.h"
 #include "Styles.h"
+#include "Resources.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     // Configure the window
-    this->setWindowIcon(QIcon(":/icons/Game.ico"));
+    this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
 
     gameState.reset();
@@ -44,7 +45,7 @@ void MainWindow::gridSetup()
     // ============ Configure settings button ============
     QPushButton *settingsButton = new QPushButton(this);
     // Set icon
-    settingsButton->setIcon(QIcon(":/icons/Settings.png"));
+    settingsButton->setIcon(QIcon(Resources::Icon::settings));
     settingsButton->setIconSize(QSize(24, 24));
 
     // Connect settings button
@@ -53,7 +54,7 @@ void MainWindow::gridSetup()
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
     // Set icon
-    instructionsButton->setIcon(QIcon(":/icons/Instructions.png"));
+    instructionsButton->setIcon(QIcon(Resources::Icon::instructions));
     instructionsButton->setIconSize(QSize(24, 24));
 
     // Connect instructions button
@@ -62,7 +63,7 @@ void MainWindow::gridSetup()
     // ============ Create restart button ============
     QPushButton *restartButton = new QPushButton(this);
     // Set icon
-    restartButton->setIcon(QIcon(":/icons/Restart.png"));
+    restartButton->setIcon(QIcon(Resources::Icon::restart));
     restartButton->setIconSize(QSize(24,24));
 
     // Connect reset Button
@@ -76,7 +77,7 @@ void MainWindow::gridSetup()
         msg.setText("Are you sure you want to restart the game?");
         msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msg.setDefaultButton(QMessageBox::No);
-        msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+        msg.setWindowIcon(QIcon(Resources::Icon::game));
 
         if (msg.exec() == QMessageBox::Yes) {
             restartGame();
@@ -86,7 +87,7 @@ void MainWindow::gridSetup()
     // ============ Create undo button ============
     QPushButton *undoButton = new QPushButton(this);
     // Set icon
-    undoButton->setIcon(QIcon(":/icons/Undo.png"));
+    undoButton->setIcon(QIcon(Resources::Icon::undo));
     undoButton->setIconSize(QSize(24,24));
 
     // Connect undo button
@@ -231,7 +232,7 @@ void MainWindow::checkGameOver()
     QMessageBox msg(this);
     msg.setWindowTitle(message.first);
     msg.setText(message.second);
-    msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+    msg.setWindowIcon(QIcon(Resources::Icon::game));
 
     QPushButton *undoBtn = msg.addButton("Undo Last Move", QMessageBox::AcceptRole);
     QPushButton *restartBtn = msg.addButton("New Game", QMessageBox::AcceptRole);
@@ -326,7 +327,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     msg.setText("Are you sure you want to exit?");
     msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msg.setDefaultButton(QMessageBox::No);
-    msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+    msg.setWindowIcon(QIcon(Resources::Icon::game));
 
     if (msg.exec() == QMessageBox::Yes)
     {
@@ -373,7 +374,7 @@ void MainWindow::showInstructions()
     // Create the instructions window
     QDialog dialog(this);
     dialog.setWindowTitle("Instructions");
-    dialog.setWindowIcon(QIcon(":/icons/Game.ico"));
+    dialog.setWindowIcon(QIcon(Resources::Icon::game));
     dialog.setModal(true);
 
     QVBoxLayout* layout = new QVBoxLayout(&dialog);
@@ -383,7 +384,7 @@ void MainWindow::showInstructions()
     browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Load instructions from file
-    QString text = loadInstructions(":/data/Instructions.html");
+    QString text = loadInstructions(Resources::Instructions::instructionsFile);
     browser->setHtml(text);
 
     // Close button

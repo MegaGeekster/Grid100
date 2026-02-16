@@ -1,13 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/Instructions.png</file>
-        <file>icons/Game.ico</file>
-        <file>icons/Restart.png</file>
-        <file>icons/Undo.png</file>
-        <file>icons/Settings.png</file>
-        <file>data/Instructions.html</file>
-        <file>images/second_move.png</file>
-        <file>images/streight_move.png</file>
-        <file>images/diagonal_move.png</file>
+        <file>resources/images/diagonal_move.png</file>
+        <file>resources/images/second_move.png</file>
+        <file>resources/images/streight_move.png</file>
+        <file>resources/icons/Game.ico</file>
+        <file>resources/icons/Instructions.png</file>
+        <file>resources/icons/Restart.png</file>
+        <file>resources/icons/Settings.png</file>
+        <file>resources/icons/Undo.png</file>
+        <file>resources/data/Instructions.html</file>
     </qresource>
 </RCC>
