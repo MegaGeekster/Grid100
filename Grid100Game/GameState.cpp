@@ -105,7 +105,7 @@ std::pair<QString, QString> GameState::getGameOverMessage()
     // If won game
     if(percentage == 100)
     {
-        message.first = "You win!";
+        message.first = "You Win!";
         message.second = "Unbelievable! You won!\nCongratulations!";
         return message;
     }
