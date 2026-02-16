@@ -223,40 +223,19 @@ void MainWindow::checkGameOver()
         return;
     }
 
-    std::pair<QString, QString> text = {"", ""};
-    int finalNumber = gameState.getGridSize() * gameState.getGridSize();
-
     std::vector<QPoint> legalMoves = gameState.getLegalMoves();
-    // If won the game
-    if(gameState.getCurrentNumber() > finalNumber)
-    {
-        gameState.gameOver = true;
-        // Title
-        text.first = "You Won!";
-        // Message
-        text.second = "You did it!.\nUnbelievable!";
-    }
-    // If no more legal moves
-    else if(legalMoves.empty())
-    {
-        gameState.gameOver = true;
-        // Title
-        text.first = "Game Over";
-        // Message
-        text.second = text.second = QString("You reached <b>%1</b>!<br>No more legal moves.</br><br>Game over!</br>")
-                                        .arg(gameState.getCurrentNumber() - 1);;
-    }
 
-    // If game is not over, do nothing
-    if(!gameState.gameOver)
+    if(!legalMoves.empty())
     {
         return;
     }
+    gameState.gameOver = true;
+    std::pair<QString, QString> message = gameState.getGameOverMessage();
 
     // Set game over dialog
     QMessageBox msg(this);
-    msg.setWindowTitle(text.first);
-    msg.setText(text.second);
+    msg.setWindowTitle(message.first);
+    msg.setText(message.second);
     msg.setWindowIcon(QIcon(":/icons/Game.ico"));
 
     QPushButton *undoBtn = msg.addButton("Undo Last Move", QMessageBox::AcceptRole);

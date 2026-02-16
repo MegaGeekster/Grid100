@@ -25,6 +25,8 @@ public:
     void reset();
 
     void undoLastMove(const QPoint &lastPosition, const QPoint &newPosition);
+    int calculatePercentage();
+    std::pair<QString, QString> getGameOverMessage();
 
     bool gameOver = false;
     bool hasStarted;
