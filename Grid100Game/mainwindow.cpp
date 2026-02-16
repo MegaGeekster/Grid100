@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QTextBrowser>
 #include "settingsdialog.h"
+#include "Styles.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -159,13 +160,7 @@ void MainWindow::createGridButtons()
             // Set size and style
             cell->setFixedSize(32, 32);
             // cell->setAlignment(Qt::AlignCenter);
-            cell->setStyleSheet(
-                "QPushButton {"
-                "border: 1px solid #555;"
-                "margin: 0px;"
-                "padding: 0px;"
-                "}"
-                );
+            cell->setStyleSheet(Styles::cellSetup);
 
             // Connect button
             connect(cell, &QPushButton::clicked, this, [=]() {
@@ -269,11 +264,7 @@ void MainWindow::highlightLegalMoves()
     {
         int r = move.x();
         int c = move.y();
-        cellButtons[r][c]->setStyleSheet(
-            "QPushButton {"
-            "background-color: #ADD8E6;"
-            "border: 1px solid #555;"
-            "}"
+        cellButtons[r][c]->setStyleSheet(Styles::getCellStyle(Styles::CellType::LEGAL)
             );
     }
 }
@@ -287,12 +278,7 @@ void MainWindow::restartGame()
 void MainWindow::set0GridButton(const QPoint point)
 {
     cellButtons[point.x()][point.y()]->setText("");
-    cellButtons[point.x()][point.y()]->setStyleSheet(
-        "QPushButton {"
-        "background-color: none;"
-        "border: 1px solid #555;"
-        "}"
-        );
+    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getCellStyle(Styles::CellType::EMPTY));
 }
 
 void MainWindow::updateGridUI()
@@ -311,12 +297,7 @@ void MainWindow::updateGridUI()
             else
             {
                 cellButtons[row][col]->setText(QString::number(value));
-                cellButtons[row][col]->setStyleSheet(
-                    "QPushButton {"
-                    "background-color: #D3D3D3;"
-                    "border: 1px solid #555;"
-                    "}"
-                    );
+                cellButtons[row][col]->setStyleSheet(Styles::getCellStyle(Styles::CellType::OCCUPIED));
             }
         }
     }
@@ -327,12 +308,7 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(
-        "QPushButton {"
-        "background-color: #D5FFFF;"
-        "border: 1px solid #555;"
-        "}"
-        );
+    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getCellStyle(Styles::CellType::CURRENT));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

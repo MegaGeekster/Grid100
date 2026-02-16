@@ -34,6 +34,8 @@ SOURCES += \
 
 HEADERS += \
     GameState.h \
+    Resources.h \
+    Styles.h \
     mainwindow.h \
     settingsdialog.h
 
