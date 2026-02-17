@@ -13,47 +13,67 @@ public:
     };
     inline static Mode mode = LIGHT;
 
-    enum CellType
+    enum Target
     {
-        EMPTY,
-        OCCUPIED,
-        LEGAL,
-        CURRENT
+        EMPTY_CELL,
+        OCCUPIED_CELL,
+        LEGAL_CELL,
+        CURRENT_CELL,
+        BACKGROUND
     };
 
-    static QString getCellStyle(CellType const cellType)
+    static QString getStyle(Target const target)
     {
-        QString style = cellStyle;
+        QMap<Target, QString> colorMap;
         switch(mode)
         {
         case DARK:
+            colorMap = Colors::dark;
+            break;
         case LIGHT:
         {
-            style = cellStyle.arg(Colors::light.value(cellType, "none"));
+            colorMap = Colors::light;
             break;
         }
         }
 
-        return style;
+        switch(target)
+        {
+        case BACKGROUND:
+        {
+            return QString("background-color: %1;").arg(colorMap.value(target, "none"));
+        }
+        default:
+            return cellStyle.arg(colorMap.value(target, "none"));
+        }
     }
 
     inline static QString const cellSetup = "QPushButton {"
-                               "border: 1px solid #555;"
+                               "border: 1px solid #000000;"
                                "margin: 0px;"
                                "padding: 0px;"
                                "}";
 private:
     struct Colors
     {
-        inline static QMap<CellType, QString> const light{
-            {EMPTY, "none"},
-            {OCCUPIED, "#D3D3D3"},
-            {LEGAL, "#ADD8E6"},
-            {CURRENT, "#D5FFFF"}
+        inline static QMap<Target, QString> const light{
+            {EMPTY_CELL, "none"},
+            {OCCUPIED_CELL, "#D3D3D3"},
+            {LEGAL_CELL, "#ADD8E6"},
+            {CURRENT_CELL, "#D5FFFF"},
+            {BACKGROUND, "none"}
+        };
+
+        inline static QMap<Target, QString> const dark{
+            {EMPTY_CELL, "#868482"},
+            {OCCUPIED_CELL, "#A0A0A0"},
+            {LEGAL_CELL, "#598482"},
+            {CURRENT_CELL, "#56D4D2"},
+            {BACKGROUND, "#868482"}
         };
     };
 
-    inline static QString cellStyle = "QPushButton {"
+    inline static QString const cellStyle = "QPushButton {"
                                       "background-color: %1;"
                                       "border: 1px solid #555;"
                                       "}";

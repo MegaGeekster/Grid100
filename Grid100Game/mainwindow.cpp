@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Configure the window
     this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
+    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND));
 
     gameState.reset();
     gridSetup();
@@ -265,7 +266,7 @@ void MainWindow::highlightLegalMoves()
     {
         int r = move.x();
         int c = move.y();
-        cellButtons[r][c]->setStyleSheet(Styles::getCellStyle(Styles::CellType::LEGAL)
+        cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::Target::LEGAL_CELL)
             );
     }
 }
@@ -279,7 +280,7 @@ void MainWindow::restartGame()
 void MainWindow::set0GridButton(const QPoint point)
 {
     cellButtons[point.x()][point.y()]->setText("");
-    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getCellStyle(Styles::CellType::EMPTY));
+    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getStyle(Styles::Target::EMPTY_CELL));
 }
 
 void MainWindow::updateGridUI()
@@ -298,7 +299,7 @@ void MainWindow::updateGridUI()
             else
             {
                 cellButtons[row][col]->setText(QString::number(value));
-                cellButtons[row][col]->setStyleSheet(Styles::getCellStyle(Styles::CellType::OCCUPIED));
+                cellButtons[row][col]->setStyleSheet(Styles::getStyle(Styles::Target::OCCUPIED_CELL));
             }
         }
     }
@@ -309,7 +310,7 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getCellStyle(Styles::CellType::CURRENT));
+    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::Target::CURRENT_CELL));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
