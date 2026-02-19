@@ -2,6 +2,7 @@
 #define STYLES_H
 
 #include <QMap>
+#include "Resources.h"
 
 class Styles
 {
@@ -48,6 +49,20 @@ public:
         }
     }
 
+    inline static QString getModePath(QString const& path, QString const& image)
+    {
+        QString folderName = "";
+        switch(mode)
+        {
+        case DARK:
+            folderName = "dark/";
+            break;
+        case LIGHT:
+            folderName = "light/";
+            break;
+        }
+        return path + folderName + image;
+    }
     inline static QString const cellSetup = "QPushButton {"
                                "border: 1px solid #000000;"
                                "margin: 0px;"
@@ -66,7 +81,7 @@ private:
 
         inline static QMap<Target, QString> const dark{
             {EMPTY_CELL, "#868482"},
-            {OCCUPIED_CELL, "#A0A0A0"},
+            {OCCUPIED_CELL, "#AAAAAA"},
             {LEGAL_CELL, "#598482"},
             {CURRENT_CELL, "#56D4D2"},
             {BACKGROUND, "#868482"}
@@ -75,7 +90,7 @@ private:
 
     inline static QString const cellStyle = "QPushButton {"
                                       "background-color: %1;"
-                                      "border: 1px solid #555;"
+                                      "border: 1px solid #000000;"
                                       "}";
 
 };

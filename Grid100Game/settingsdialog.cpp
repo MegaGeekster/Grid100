@@ -3,6 +3,8 @@
 
 #include <QFormLayout>
 #include <QMessageBox>
+#include "Resources.h"
+#include "Styles.h"
 
 SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted, QWidget *parent)
     : QDialog(parent)
@@ -14,7 +16,7 @@ SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted
     , maxGridSize(25)
 {
     ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/icons/Game.ico"));
+    this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Settings");
 
     windowSetup();
@@ -100,7 +102,7 @@ void SettingsDialog::accept()
         msg.setText("Changing the window size will stop the current game.\nAre you sure you want to restart the game?");
         msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msg.setDefaultButton(QMessageBox::No);
-        msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+        msg.setWindowIcon(QIcon(Resources::Icon::game));
 
         // Cancle the change
         if(msg.exec() == QMessageBox::No)
