@@ -46,7 +46,7 @@ void MainWindow::gridSetup()
     // ============ Configure settings button ============
     QPushButton *settingsButton = new QPushButton(this);
     // Set icon
-    settingsButton->setIcon(QIcon(Styles::getModePath(Resources::Icon::iconsPath ,Resources::Icon::settings)));
+    settingsButton->setIcon(QIcon(Styles::getSettingsIcon()));
     settingsButton->setIconSize(QSize(24, 24));
 
     // Connect settings button
@@ -55,7 +55,7 @@ void MainWindow::gridSetup()
     // ============ Create instructions button ============
     QPushButton *instructionsButton = new QPushButton(this);
     // Set icon
-    instructionsButton->setIcon(QIcon(Styles::getModePath(Resources::Icon::iconsPath ,Resources::Icon::instructions)));
+    instructionsButton->setIcon(QIcon(Styles::getInstructionsIcon()));
     instructionsButton->setIconSize(QSize(24, 24));
 
     // Connect instructions button
@@ -64,7 +64,7 @@ void MainWindow::gridSetup()
     // ============ Create restart button ============
     QPushButton *restartButton = new QPushButton(this);
     // Set icon
-    restartButton->setIcon(QIcon(Styles::getModePath(Resources::Icon::iconsPath ,Resources::Icon::restart)));
+    restartButton->setIcon(QIcon(Styles::getRestartIcon()));
     restartButton->setIconSize(QSize(24,24));
 
     // Connect reset Button
@@ -88,7 +88,7 @@ void MainWindow::gridSetup()
     // ============ Create undo button ============
     QPushButton *undoButton = new QPushButton(this);
     // Set icon
-    undoButton->setIcon(QIcon(Styles::getModePath(Resources::Icon::iconsPath ,Resources::Icon::undo)));
+    undoButton->setIcon(QIcon(Styles::getUndoIcon()));
     undoButton->setIconSize(QSize(24,24));
 
     // Connect undo button
@@ -385,7 +385,7 @@ void MainWindow::showInstructions()
     browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Load instructions from file
-    QString text = loadInstructions(Styles::getModePath(Resources::dataPath, Resources::Instructions::instructionsFile));
+    QString text = loadInstructions(Styles::getInstructionsFile());
     browser->setHtml(text);
 
     // Close button

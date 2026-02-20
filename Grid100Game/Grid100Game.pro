@@ -28,6 +28,7 @@ else {
 
 SOURCES += \
     GameState.cpp \
+    Styles.cpp \
     main.cpp \
     mainwindow.cpp \
     settingsdialog.cpp

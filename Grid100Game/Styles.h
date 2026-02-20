@@ -23,52 +23,48 @@ public:
         BACKGROUND
     };
 
-    static QString getStyle(Target const target)
-    {
-        QMap<Target, QString> colorMap;
-        switch(mode)
-        {
-        case DARK:
-            colorMap = Colors::dark;
-            break;
-        case LIGHT:
-        {
-            colorMap = Colors::light;
-            break;
-        }
-        }
+    static QString getStyle(Target const target);
 
-        switch(target)
-        {
-        case BACKGROUND:
-        {
-            return QString("background-color: %1;").arg(colorMap.value(target, "none"));
-        }
-        default:
-            return cellStyle.arg(colorMap.value(target, "none"));
-        }
-    }
-
-    inline static QString getModePath(QString const& path, QString const& image)
-    {
-        QString folderName = "";
-        switch(mode)
-        {
-        case DARK:
-            folderName = "dark/";
-            break;
-        case LIGHT:
-            folderName = "light/";
-            break;
-        }
-        return path + folderName + image;
-    }
     inline static QString const cellSetup = "QPushButton {"
                                "border: 1px solid #000000;"
                                "margin: 0px;"
                                "padding: 0px;"
                                "}";
+
+    // Get resources
+    inline static QString getGameIcon()
+    {
+        return getModePath(Resources::Icon::iconsPath, Resources::Icon::game);
+    }
+
+    inline static QString getUndoIcon()
+    {
+        return getModePath(Resources::Icon::iconsPath, Resources::Icon::undo);
+    }
+
+    inline static QString getRestartIcon()
+    {
+        return getModePath(Resources::Icon::iconsPath, Resources::Icon::restart);
+    }
+
+    inline static QString getSettingsIcon()
+    {
+        return getModePath(Resources::Icon::iconsPath, Resources::Icon::settings);
+    }
+
+    inline static QString getInstructionsIcon()
+    {
+        return getModePath(Resources::Icon::iconsPath, Resources::Icon::instructions);
+    }
+
+    inline static QString getInstructionsFile()
+    {
+        return getModePath(Resources::dataPath, Resources::Instructions::instructionsFile);
+    }
+
 private:
+    static QString getModePath(QString const& path, QString const& image);
+
     struct Colors
     {
         inline static QMap<Target, QString> const light{
