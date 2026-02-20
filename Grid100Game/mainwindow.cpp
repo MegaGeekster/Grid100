@@ -8,7 +8,6 @@
 #include <QTextStream>
 #include <QTextBrowser>
 #include "settingsdialog.h"
-#include "Styles.h"
 #include "Resources.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -44,28 +43,19 @@ void MainWindow::gridSetup()
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
 
     // ============ Configure settings button ============
-    QPushButton *settingsButton = new QPushButton(this);
-    // Set icon
-    settingsButton->setIcon(QIcon(Styles::getSettingsIcon()));
-    settingsButton->setIconSize(QSize(24, 24));
+    settingsButton = new QPushButton(this);
 
     // Connect settings button
     connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
 
     // ============ Create instructions button ============
-    QPushButton *instructionsButton = new QPushButton(this);
-    // Set icon
-    instructionsButton->setIcon(QIcon(Styles::getInstructionsIcon()));
-    instructionsButton->setIconSize(QSize(24, 24));
+    instructionsButton = new QPushButton(this);
 
     // Connect instructions button
     connect(instructionsButton, &QPushButton::clicked, this, &MainWindow::showInstructions);
 
     // ============ Create restart button ============
-    QPushButton *restartButton = new QPushButton(this);
-    // Set icon
-    restartButton->setIcon(QIcon(Styles::getRestartIcon()));
-    restartButton->setIconSize(QSize(24,24));
+    restartButton = new QPushButton(this);
 
     // Connect reset Button
     connect(restartButton, &QPushButton::clicked, this, [=](){
@@ -86,10 +76,7 @@ void MainWindow::gridSetup()
     });
 
     // ============ Create undo button ============
-    QPushButton *undoButton = new QPushButton(this);
-    // Set icon
-    undoButton->setIcon(QIcon(Styles::getUndoIcon()));
-    undoButton->setIconSize(QSize(24,24));
+    undoButton = new QPushButton(this);
 
     // Connect undo button
     connect(undoButton, &QPushButton::clicked, this, [=](){
@@ -116,6 +103,9 @@ void MainWindow::gridSetup()
     // Add top bar to main layout
     mainLayout->addLayout(topBarLayout);
 
+    // Set icons
+    setButtonIcons();
+
     // ============ Create a grid layout ============
     boardWidget = new QWidget(ui->centralwidget);
     gridLayout = new QGridLayout(boardWidget);
@@ -128,6 +118,22 @@ void MainWindow::gridSetup()
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     createGridButtons();
+}
+
+void MainWindow::setButtonIcons()
+{
+    // Undo
+    undoButton->setIcon(QIcon(Styles::getUndoIcon()));
+    undoButton->setIconSize(QSize(24,24));
+    // Instructions
+    instructionsButton->setIcon(QIcon(Styles::getInstructionsIcon()));
+    instructionsButton->setIconSize(QSize(24, 24));
+    // Settings
+    settingsButton->setIcon(QIcon(Styles::getSettingsIcon()));
+    settingsButton->setIconSize(QSize(24, 24));
+    // Restart
+    restartButton->setIcon(QIcon(Styles::getRestartIcon()));
+    restartButton->setIconSize(QSize(24,24));
 }
 
 void MainWindow::createGridButtons()
@@ -415,6 +421,10 @@ void MainWindow::openSettings()
     // Handle grid size
     int selectedGridSize = dlg.getSelecteGridSize();
     handleGridSize(selectedGridSize);
+
+    // Handle theme
+    Styles::Mode selectedTheme = dlg.getSelectedTheme();
+    handleTheme(selectedTheme);
 }
 
 void MainWindow::handleGridSize(const int selectedGridSize)
@@ -427,6 +437,20 @@ void MainWindow::handleGridSize(const int selectedGridSize)
     gameState.setGridSize(selectedGridSize);
     createGridButtons();
     restartGame();
+}
+
+void MainWindow::handleTheme(Styles::Mode const selectedTheme)
+{
+    if(selectedTheme == Styles::mode)
+    {
+        return;
+    }
+
+    // Change theme
+    Styles::mode = selectedTheme;
+    updateGridUI(); // Update button colors
+    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND)); // Update background color
+    setButtonIcons();
 }
 
 MainWindow::~MainWindow()

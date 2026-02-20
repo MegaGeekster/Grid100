@@ -28,6 +28,7 @@ void SettingsDialog::windowSetup()
     QFormLayout* form = new QFormLayout();
     form->setFormAlignment(Qt::AlignLeft | Qt::AlignTop);
     form->setLabelAlignment(Qt::AlignLeft);
+
     // ======= Display grid size options =======
     // Create dropdown
     gridSizeCombo = new QComboBox(this);
@@ -65,12 +66,31 @@ void SettingsDialog::windowSetup()
         adjustSize();
     });
 
+    // ======= Display mode/theme options =======
+    themeCombo = new QComboBox(this);
+    for(const auto &option : themeOptions)
+    {
+        themeCombo->addItem(option.first, option.second);
+    }
+
+    // Set default to current theme
+    index = themeCombo->findData(Styles::mode);
+    if(index != -1)
+    {
+        themeCombo->setCurrentIndex(index);
+    }
+
+    // Add row
+    form->addRow("Theme:", themeCombo);
+
+    // ===== Finalize layout =====
     ui->verticalLayout->insertLayout(0, form);
     adjustSize();
 }
 
-void SettingsDialog::accept()
+void SettingsDialog::handleGridSize()
 {
+
     // Get the chosen grid size
     selectedGridSize = gridSizeCombo->currentData().toInt();
 
@@ -110,6 +130,18 @@ void SettingsDialog::accept()
             selectedGridSize = currentGridSize;
         }
     }
+}
+
+void SettingsDialog::handleTheme()
+{
+    // Get the chosen theme
+    selectedTheme = static_cast<Styles::Mode>(themeCombo->currentData().toInt());
+}
+
+void SettingsDialog::accept()
+{
+    handleGridSize();
+    handleTheme();
     QDialog::accept();
 }
 
