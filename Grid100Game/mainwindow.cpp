@@ -283,6 +283,7 @@ void MainWindow::highlightLegalMoves()
 void MainWindow::restartGame()
 {
     gameState.reset();
+    moveHistory ={};
     updateGridUI();
 }
 
