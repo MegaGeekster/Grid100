@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QTextBrowser>
+#include <QSettings>
 #include "settingsdialog.h"
 #include "Resources.h"
 
@@ -14,7 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // Get saved theme
+    QSettings settings;
+    Styles::mode = static_cast<Styles::Mode>(settings.value("Theme", static_cast<int>(Styles::Mode::LIGHT)).toInt());
     ui->setupUi(this);
+
     // Configure the window
     this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
@@ -448,6 +453,10 @@ void MainWindow::handleTheme(Styles::Mode const selectedTheme)
     updateGridUI(); // Update button colors
     this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND)); // Update background color
     setButtonIcons();
+
+    // Save new theme
+    QSettings settings;
+    settings.setValue("Theme", static_cast<int>(Styles::mode));
 }
 
 MainWindow::~MainWindow()
