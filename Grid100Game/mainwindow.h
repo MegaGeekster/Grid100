@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QCloseEvent>
 #include <QGridLayout>
+#include "Styles.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +37,7 @@ private:
     void resetGridButton(const QPoint point);
     void openSettings();
     void handleGridSize(const int selectedGridSize);
+    void handleTheme(const Styles::Mode slectedTheme);
     void createGridButtons();
     void showInstructions();
 
@@ -47,5 +49,12 @@ private:
     QWidget *boardWidget;
 
     std::vector<QPoint> moveHistory;
+
+    // Buttons
+    QPushButton *settingsButton;
+    QPushButton *instructionsButton;
+    QPushButton *restartButton;
+    QPushButton *undoButton;
+    void setButtonIcons();
 };
 #endif // MAINWINDOW_H

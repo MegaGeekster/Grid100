@@ -3,6 +3,8 @@
 
 #include <QFormLayout>
 #include <QMessageBox>
+#include "Resources.h"
+#include "Styles.h"
 
 SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted, QWidget *parent)
     : QDialog(parent)
@@ -14,7 +16,7 @@ SettingsDialog::SettingsDialog(const int currentGridSize, const bool gameStarted
     , maxGridSize(25)
 {
     ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/icons/Game.ico"));
+    this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Settings");
 
     windowSetup();
@@ -26,6 +28,7 @@ void SettingsDialog::windowSetup()
     QFormLayout* form = new QFormLayout();
     form->setFormAlignment(Qt::AlignLeft | Qt::AlignTop);
     form->setLabelAlignment(Qt::AlignLeft);
+
     // ======= Display grid size options =======
     // Create dropdown
     gridSizeCombo = new QComboBox(this);
@@ -63,12 +66,31 @@ void SettingsDialog::windowSetup()
         adjustSize();
     });
 
+    // ======= Display mode/theme options =======
+    themeCombo = new QComboBox(this);
+    for(const auto &option : themeOptions)
+    {
+        themeCombo->addItem(option.first, option.second);
+    }
+
+    // Set default to current theme
+    index = themeCombo->findData(Styles::mode);
+    if(index != -1)
+    {
+        themeCombo->setCurrentIndex(index);
+    }
+
+    // Add row
+    form->addRow("Theme:", themeCombo);
+
+    // ===== Finalize layout =====
     ui->verticalLayout->insertLayout(0, form);
     adjustSize();
 }
 
-void SettingsDialog::accept()
+void SettingsDialog::handleGridSize()
 {
+
     // Get the chosen grid size
     selectedGridSize = gridSizeCombo->currentData().toInt();
 
@@ -100,7 +122,7 @@ void SettingsDialog::accept()
         msg.setText("Changing the window size will stop the current game.\nAre you sure you want to restart the game?");
         msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msg.setDefaultButton(QMessageBox::No);
-        msg.setWindowIcon(QIcon(":/icons/Game.ico"));
+        msg.setWindowIcon(QIcon(Resources::Icon::game));
 
         // Cancle the change
         if(msg.exec() == QMessageBox::No)
@@ -108,6 +130,18 @@ void SettingsDialog::accept()
             selectedGridSize = currentGridSize;
         }
     }
+}
+
+void SettingsDialog::handleTheme()
+{
+    // Get the chosen theme
+    selectedTheme = static_cast<Styles::Mode>(themeCombo->currentData().toInt());
+}
+
+void SettingsDialog::accept()
+{
+    handleGridSize();
+    handleTheme();
     QDialog::accept();
 }
 

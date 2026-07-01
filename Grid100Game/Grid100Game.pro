@@ -28,6 +28,7 @@ else {
 
 SOURCES += \
     GameState.cpp \
+    Styles.cpp \
     main.cpp \
     mainwindow.cpp \
     settingsdialog.cpp
@@ -35,6 +36,7 @@ SOURCES += \
 HEADERS += \
     GameState.h \
     Resources.h \
+    Styles.h \
     mainwindow.h \
     settingsdialog.h
 

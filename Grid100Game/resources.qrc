@@ -1,13 +1,21 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/images/diagonal_move.png</file>
-        <file>resources/images/second_move.png</file>
-        <file>resources/images/streight_move.png</file>
         <file>resources/icons/Game.ico</file>
-        <file>resources/icons/Instructions.png</file>
-        <file>resources/icons/Restart.png</file>
-        <file>resources/icons/Settings.png</file>
-        <file>resources/icons/Undo.png</file>
-        <file>resources/data/Instructions.html</file>
+        <file>resources/icons/dark/Instructions.png</file>
+        <file>resources/icons/dark/Restart.png</file>
+        <file>resources/icons/dark/Settings.png</file>
+        <file>resources/icons/dark/Undo.png</file>
+        <file>resources/icons/light/Instructions.png</file>
+        <file>resources/icons/light/Restart.png</file>
+        <file>resources/icons/light/Settings.png</file>
+        <file>resources/icons/light/Undo.png</file>
+        <file>resources/data/dark/Instructions.html</file>
+        <file>resources/data/light/Instructions.html</file>
+        <file>resources/images/dark/diagonal_move.png</file>
+        <file>resources/images/dark/second_move.png</file>
+        <file>resources/images/dark/streight_move.png</file>
+        <file>resources/images/light/diagonal_move.png</file>
+        <file>resources/images/light/second_move.png</file>
+        <file>resources/images/light/streight_move.png</file>
     </qresource>
 </RCC>

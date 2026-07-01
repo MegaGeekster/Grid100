@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QTextBrowser>
+#include <QSettings>
 #include "settingsdialog.h"
 #include "Resources.h"
 
@@ -14,15 +15,19 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // Get saved theme
+    QSettings settings;
+    Styles::mode = static_cast<Styles::Mode>(settings.value("Theme", static_cast<int>(Styles::Mode::LIGHT)).toInt());
     ui->setupUi(this);
+
     // Configure the window
     this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
+    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND));
 
     gameState.reset();
     gridSetup();
     updateGridUI();
-    highlightLegalMoves();
 }
 
 QString MainWindow::loadInstructions(const QString &filePath)
@@ -42,28 +47,19 @@ void MainWindow::gridSetup()
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
 
     // ============ Configure settings button ============
-    QPushButton *settingsButton = new QPushButton(this);
-    // Set icon
-    settingsButton->setIcon(QIcon(Resources::Icon::settings));
-    settingsButton->setIconSize(QSize(24, 24));
+    settingsButton = new QPushButton(this);
 
     // Connect settings button
     connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
 
     // ============ Create instructions button ============
-    QPushButton *instructionsButton = new QPushButton(this);
-    // Set icon
-    instructionsButton->setIcon(QIcon(Resources::Icon::instructions));
-    instructionsButton->setIconSize(QSize(24, 24));
+    instructionsButton = new QPushButton(this);
 
     // Connect instructions button
     connect(instructionsButton, &QPushButton::clicked, this, &MainWindow::showInstructions);
 
     // ============ Create restart button ============
-    QPushButton *restartButton = new QPushButton(this);
-    // Set icon
-    restartButton->setIcon(QIcon(Resources::Icon::restart));
-    restartButton->setIconSize(QSize(24,24));
+    restartButton = new QPushButton(this);
 
     // Connect reset Button
     connect(restartButton, &QPushButton::clicked, this, [=](){
@@ -84,10 +80,7 @@ void MainWindow::gridSetup()
     });
 
     // ============ Create undo button ============
-    QPushButton *undoButton = new QPushButton(this);
-    // Set icon
-    undoButton->setIcon(QIcon(Resources::Icon::undo));
-    undoButton->setIconSize(QSize(24,24));
+    undoButton = new QPushButton(this);
 
     // Connect undo button
     connect(undoButton, &QPushButton::clicked, this, [=](){
@@ -114,6 +107,9 @@ void MainWindow::gridSetup()
     // Add top bar to main layout
     mainLayout->addLayout(topBarLayout);
 
+    // Set icons
+    setButtonIcons();
+
     // ============ Create a grid layout ============
     boardWidget = new QWidget(ui->centralwidget);
     gridLayout = new QGridLayout(boardWidget);
@@ -126,6 +122,22 @@ void MainWindow::gridSetup()
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
     createGridButtons();
+}
+
+void MainWindow::setButtonIcons()
+{
+    // Undo
+    undoButton->setIcon(QIcon(Styles::getUndoIcon()));
+    undoButton->setIconSize(QSize(24,24));
+    // Instructions
+    instructionsButton->setIcon(QIcon(Styles::getInstructionsIcon()));
+    instructionsButton->setIconSize(QSize(24, 24));
+    // Settings
+    settingsButton->setIcon(QIcon(Styles::getSettingsIcon()));
+    settingsButton->setIconSize(QSize(24, 24));
+    // Restart
+    restartButton->setIcon(QIcon(Styles::getRestartIcon()));
+    restartButton->setIconSize(QSize(24,24));
 }
 
 void MainWindow::createGridButtons()
@@ -160,13 +172,7 @@ void MainWindow::createGridButtons()
             // Set size and style
             cell->setFixedSize(32, 32);
             // cell->setAlignment(Qt::AlignCenter);
-            cell->setStyleSheet(
-                "QPushButton {"
-                "border: 1px solid #555;"
-                "margin: 0px;"
-                "padding: 0px;"
-                "}"
-                );
+            cell->setStyleSheet(Styles::cellSetup);
 
             // Connect button
             connect(cell, &QPushButton::clicked, this, [=]() {
@@ -212,7 +218,6 @@ void MainWindow::onCellClicked(int row, int col)
 
     gameState.placeNumber(pos);
     updateGridUI();
-    highlightLegalMoves();
     moveHistory.push_back(pos);
     checkGameOver();
 }
@@ -270,11 +275,7 @@ void MainWindow::highlightLegalMoves()
     {
         int r = move.x();
         int c = move.y();
-        cellButtons[r][c]->setStyleSheet(
-            "QPushButton {"
-            "background-color: #ADD8E6;"
-            "border: 1px solid #555;"
-            "}"
+        cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::Target::LEGAL_CELL)
             );
     }
 }
@@ -288,12 +289,7 @@ void MainWindow::restartGame()
 void MainWindow::set0GridButton(const QPoint point)
 {
     cellButtons[point.x()][point.y()]->setText("");
-    cellButtons[point.x()][point.y()]->setStyleSheet(
-        "QPushButton {"
-        "background-color: none;"
-        "border: 1px solid #555;"
-        "}"
-        );
+    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getStyle(Styles::Target::EMPTY_CELL));
 }
 
 void MainWindow::updateGridUI()
@@ -312,12 +308,7 @@ void MainWindow::updateGridUI()
             else
             {
                 cellButtons[row][col]->setText(QString::number(value));
-                cellButtons[row][col]->setStyleSheet(
-                    "QPushButton {"
-                    "background-color: #D3D3D3;"
-                    "border: 1px solid #555;"
-                    "}"
-                    );
+                cellButtons[row][col]->setStyleSheet(Styles::getStyle(Styles::Target::OCCUPIED_CELL));
             }
         }
     }
@@ -328,12 +319,9 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(
-        "QPushButton {"
-        "background-color: #D5FFFF;"
-        "border: 1px solid #555;"
-        "}"
-        );
+    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::Target::CURRENT_CELL));
+
+    highlightLegalMoves();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -388,9 +376,6 @@ void MainWindow::undoLastMove()
 
     // Reset grid
     updateGridUI();
-
-    // Highlight legal moves for new position
-    highlightLegalMoves();
 }
 
 void MainWindow::showInstructions()
@@ -408,7 +393,7 @@ void MainWindow::showInstructions()
     browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Load instructions from file
-    QString text = loadInstructions(Resources::Instructions::instructionsFile);
+    QString text = loadInstructions(Styles::getInstructionsFile());
     browser->setHtml(text);
 
     // Close button
@@ -421,8 +406,8 @@ void MainWindow::showInstructions()
 
     // Open at 70% of screen size
     QSize screenSize = dialog.screen()->availableGeometry().size();
-    dialog.resize(screenSize.width() * 0.7,
-                  screenSize.height() * 0.7);
+    dialog.resize(screenSize.width() * 0.95,
+                  screenSize.height() * 0.95);
 
     dialog.exec();
 }
@@ -438,6 +423,10 @@ void MainWindow::openSettings()
     // Handle grid size
     int selectedGridSize = dlg.getSelecteGridSize();
     handleGridSize(selectedGridSize);
+
+    // Handle theme
+    Styles::Mode selectedTheme = dlg.getSelectedTheme();
+    handleTheme(selectedTheme);
 }
 
 void MainWindow::handleGridSize(const int selectedGridSize)
@@ -450,6 +439,24 @@ void MainWindow::handleGridSize(const int selectedGridSize)
     gameState.setGridSize(selectedGridSize);
     createGridButtons();
     restartGame();
+}
+
+void MainWindow::handleTheme(Styles::Mode const selectedTheme)
+{
+    if(selectedTheme == Styles::mode)
+    {
+        return;
+    }
+
+    // Change theme
+    Styles::mode = selectedTheme;
+    updateGridUI(); // Update button colors
+    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND)); // Update background color
+    setButtonIcons();
+
+    // Save new theme
+    QSettings settings;
+    settings.setValue("Theme", static_cast<int>(Styles::mode));
 }
 
 MainWindow::~MainWindow()

@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <QComboBox>
 #include <QSpinBox>
+#include "Styles.h"
 
 namespace Ui {
 class SettingsDialog;
@@ -17,11 +18,15 @@ class SettingsDialog : public QDialog
 public:
     explicit SettingsDialog(const int currentGridSize, const bool gameStarted, QWidget *parent = nullptr);
     int getSelecteGridSize() {return selectedGridSize;}
+    Styles::Mode getSelectedTheme() {return selectedTheme;}
     ~SettingsDialog();
 
 private:
     void windowSetup();
     void accept() override;
+
+    // ===== Grid size =====
+    void handleGridSize();
 
     QComboBox* gridSizeCombo;
     std::unordered_map<QString, int> gridSizeOptions{
@@ -38,6 +43,16 @@ private:
 
     int currentGridSize;
     int selectedGridSize;
+
+    // ===== Mode/Theme =====
+    void handleTheme();
+    QComboBox* themeCombo;
+    std::unordered_map<QString, Styles::Mode> themeOptions{
+        {"Light Theme", Styles::Mode::LIGHT},
+        {"Dark Theme", Styles::Mode::DARK}
+    };
+    Styles::Mode selectedTheme;
+
     bool gameStarted;
     Ui::SettingsDialog *ui;
 };
