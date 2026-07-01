@@ -89,7 +89,7 @@ private:
         {
             {EMPTY_CELL, "757575"},
             {OCCUPIED_CELL, "#696969"},
-            {LEGAL_CELL, "#598482"},
+            {LEGAL_CELL, "#78AAA8"},
             {CURRENT_CELL, "#56D4D2"},
             {BACKGROUND, "#808080"}
         },
