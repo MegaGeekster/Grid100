@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
     gameState.reset();
     gridSetup();
     updateGridUI();
-    highlightLegalMoves();
 }
 
 QString MainWindow::loadInstructions(const QString &filePath)
@@ -214,7 +213,6 @@ void MainWindow::onCellClicked(int row, int col)
 
     gameState.placeNumber(pos);
     updateGridUI();
-    highlightLegalMoves();
     moveHistory.push_back(pos);
     checkGameOver();
 }
@@ -317,6 +315,8 @@ void MainWindow::updateGridUI()
     }
     QPoint currentCell = gameState.getCurrentPos();
     cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::Target::CURRENT_CELL));
+
+    highlightLegalMoves();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -371,9 +371,6 @@ void MainWindow::undoLastMove()
 
     // Reset grid
     updateGridUI();
-
-    // Highlight legal moves for new position
-    highlightLegalMoves();
 }
 
 void MainWindow::showInstructions()
