@@ -65,28 +65,42 @@ public:
 private:
     static QString getModePath(QString const& path, QString const& image);
 
-    struct Colors
+    struct Theme
     {
-        inline static QMap<Target, QString> const light{
+        QMap<Target, QString> backgrounds;
+        QString text;
+        QString border;
+    };
+
+    inline static Theme const light
+    {
+        {
             {EMPTY_CELL, "none"},
             {OCCUPIED_CELL, "#D3D3D3"},
             {LEGAL_CELL, "#ADD8E6"},
             {CURRENT_CELL, "#D5FFFF"},
             {BACKGROUND, "none"}
-        };
+        },
+        "#000000", // text
+        "#000000"  // border
+    };
 
-        inline static QMap<Target, QString> const dark{
-            {EMPTY_CELL, "#868482"},
-            {OCCUPIED_CELL, "#AAAAAA"},
+    inline static Theme const dark{
+        {
+            {EMPTY_CELL, "757575"},
+            {OCCUPIED_CELL, "#696969"},
             {LEGAL_CELL, "#598482"},
             {CURRENT_CELL, "#56D4D2"},
-            {BACKGROUND, "#868482"}
-        };
+            {BACKGROUND, "#808080"}
+        },
+        "#FFFFFF", // text
+        "#F0F0F0"  // border
     };
 
     inline static QString const cellStyle = "QPushButton {"
                                       "background-color: %1;"
-                                      "border: 1px solid #000000;"
+                                      "color: %2;"
+                                      "border: 1px solid %3;"
                                       "}";
 
 };

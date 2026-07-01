@@ -2,15 +2,15 @@
 
 QString Styles::getStyle(Target const target)
 {
-    QMap<Target, QString> colorMap;
+    Theme colorTheme;
     switch(mode)
     {
     case DARK:
-        colorMap = Colors::dark;
+        colorTheme = dark;
         break;
     case LIGHT:
     {
-        colorMap = Colors::light;
+        colorTheme = light;
         break;
     }
     }
@@ -19,10 +19,10 @@ QString Styles::getStyle(Target const target)
     {
     case BACKGROUND:
     {
-        return QString("background-color: %1;").arg(colorMap.value(target, "none"));
+        return QString("background-color: %1;").arg(colorTheme.backgrounds.value(target, "none"));
     }
     default:
-        return cellStyle.arg(colorMap.value(target, "none"));
+        return cellStyle.arg(colorTheme.backgrounds.value(target, "none"), colorTheme.text, colorTheme.border);
     }
 }
 

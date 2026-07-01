@@ -404,8 +404,8 @@ void MainWindow::showInstructions()
 
     // Open at 70% of screen size
     QSize screenSize = dialog.screen()->availableGeometry().size();
-    dialog.resize(screenSize.width() * 0.8,
-                  screenSize.height() * 0.8);
+    dialog.resize(screenSize.width() * 0.95,
+                  screenSize.height() * 0.95);
 
     dialog.exec();
 }
