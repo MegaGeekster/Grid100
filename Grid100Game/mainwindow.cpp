@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QTextBrowser>
 #include <QSettings>
+#include <QShortcut>
 #include "settingsdialog.h"
 #include "Resources.h"
 
@@ -46,46 +47,38 @@ void MainWindow::gridSetup()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(ui->centralwidget);
 
-    // ============ Configure settings button ============
+    // ============ Configure settings button and shortcut ============
     settingsButton = new QPushButton(this);
+    auto* settingsShortcut = new QShortcut(QKeySequence(Qt::Key_S), this);
 
-    // Connect settings button
+    // Connect settings button and shortcut
     connect(settingsButton, &QPushButton::clicked, this,  &MainWindow::openSettings);
+    connect(settingsShortcut, QShortcut::activated, this, &MainWindow::openSettings);
 
-    // ============ Create instructions button ============
+    // ============ Create instructions button and shortcut ============
     instructionsButton = new QPushButton(this);
+    auto* instructionsShortcut = new QShortcut(QKeySequence(Qt::Key_I), this);
 
-    // Connect instructions button
+    // Connect instructions button and shortcut
     connect(instructionsButton, &QPushButton::clicked, this, &MainWindow::showInstructions);
+    connect(instructionsShortcut, QShortcut::activated, this, &MainWindow::showInstructions);
 
-    // ============ Create restart button ============
+    // ============ Create restart button and shortcut ============
     restartButton = new QPushButton(this);
+    auto* restartShortcut = new QShortcut(QKeySequence(Qt::Key_R), this);
 
-    // Connect reset Button
-    connect(restartButton, &QPushButton::clicked, this, [=](){
-        if(!gameState.hasStarted)
-        {
-            return;
-        }
-        QMessageBox msg(this);
-        msg.setWindowTitle("Restart Game");
-        msg.setText("Are you sure you want to restart the game?");
-        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msg.setDefaultButton(QMessageBox::No);
-        msg.setWindowIcon(QIcon(Resources::Icon::game));
+    // Connect reset Button and shortcut
+    connect(restartButton, &QPushButton::clicked, this, &MainWindow::handleGameRestart);
+    connect(restartShortcut, QShortcut::activated, this, &MainWindow::handleGameRestart);
 
-        if (msg.exec() == QMessageBox::Yes) {
-            restartGame();
-        }
-    });
-
-    // ============ Create undo button ============
+    // ============ Create undo button and shortcut ============
     undoButton = new QPushButton(this);
+    auto* undoShortcut = new QShortcut(this);
+    undoShortcut->setKeys({QKeySequence::Undo, QKeySequence(Qt::Key_Backspace)});
 
-    // Connect undo button
-    connect(undoButton, &QPushButton::clicked, this, [=](){
-        undoLastMove();
-    });
+    // Connect undo button and shortcut
+    connect(undoButton, &QPushButton::clicked, this, &MainWindow::undoLastMove);
+    connect(undoShortcut, QShortcut::activated, this, &MainWindow::undoLastMove);
 
     // ============ Top bar layout ============
     QHBoxLayout *topBarLayout = new QHBoxLayout();
@@ -277,6 +270,25 @@ void MainWindow::highlightLegalMoves()
         int c = move.y();
         cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::Target::LEGAL_CELL)
             );
+    }
+}
+
+void MainWindow::handleGameRestart()
+{
+    if(!gameState.hasStarted)
+    {
+        return;
+    }
+    QMessageBox msg(this);
+    msg.setWindowTitle("Restart Game");
+    msg.setText("Are you sure you want to restart the game?");
+    msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msg.setDefaultButton(QMessageBox::No);
+    msg.setWindowIcon(QIcon(Resources::Icon::game));
+
+    if (msg.exec() == QMessageBox::Yes)
+    {
+        restartGame();
     }
 }
 

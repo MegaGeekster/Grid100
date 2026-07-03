@@ -26,11 +26,13 @@ public:
 
 private:
     void gridSetup();
+    void shortcutSetup();
     QString loadInstructions(const QString &filePath);
     void onCellClicked(int row, int col);
     void updateGridUI();
     void highlightLegalMoves();
     void checkGameOver();
+    void handleGameRestart();
     void restartGame();
     void closeEvent(QCloseEvent *event) override;
     void set0GridButton(const QPoint point);
