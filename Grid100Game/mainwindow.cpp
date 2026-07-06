@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Configure the window
     this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
-    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND));
+    this->setStyleSheet(Styles::getStyle(Styles::StyleType::BACKGROUND));
 
     gameState.reset();
     gridSetup();
@@ -275,7 +275,7 @@ void MainWindow::highlightLegalMoves()
     {
         int r = move.x();
         int c = move.y();
-        cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::Target::LEGAL_CELL)
+        cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::StyleType::LEGAL_CELL)
             );
     }
 }
@@ -290,7 +290,7 @@ void MainWindow::restartGame()
 void MainWindow::set0GridButton(const QPoint point)
 {
     cellButtons[point.x()][point.y()]->setText("");
-    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getStyle(Styles::Target::EMPTY_CELL));
+    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getStyle(Styles::StyleType::EMPTY_CELL));
 }
 
 void MainWindow::updateGridUI()
@@ -309,7 +309,7 @@ void MainWindow::updateGridUI()
             else
             {
                 cellButtons[row][col]->setText(QString::number(value));
-                cellButtons[row][col]->setStyleSheet(Styles::getStyle(Styles::Target::OCCUPIED_CELL));
+                cellButtons[row][col]->setStyleSheet(Styles::getStyle(Styles::StyleType::OCCUPIED_CELL));
             }
         }
     }
@@ -320,7 +320,7 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::Target::CURRENT_CELL));
+    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::StyleType::CURRENT_CELL));
 
     highlightLegalMoves();
 }
@@ -452,7 +452,7 @@ void MainWindow::handleTheme(Styles::Mode const selectedTheme)
     // Change theme
     Styles::mode = selectedTheme;
     updateGridUI(); // Update button colors
-    this->setStyleSheet(Styles::getStyle(Styles::Target::BACKGROUND)); // Update background color
+    this->setStyleSheet(Styles::getStyle(Styles::StyleType::BACKGROUND)); // Update background color
     setButtonIcons();
 
     // Save new theme

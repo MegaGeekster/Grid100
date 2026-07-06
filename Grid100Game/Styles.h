@@ -14,7 +14,7 @@ public:
     };
     inline static Mode mode = LIGHT;
 
-    enum Target
+    enum StyleType
     {
         EMPTY_CELL,
         OCCUPIED_CELL,
@@ -23,7 +23,7 @@ public:
         BACKGROUND
     };
 
-    static QString getStyle(Target const target);
+    static QString getStyle(StyleType const type);
 
     inline static QString const cellSetup = "QPushButton {"
                                "border: 1px solid #000000;"
@@ -67,7 +67,7 @@ private:
 
     struct Theme
     {
-        QMap<Target, QString> backgrounds;
+        QMap<StyleType, QString> backgrounds;
         QString text;
         QString border;
     };

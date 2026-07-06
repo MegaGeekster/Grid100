@@ -1,6 +1,6 @@
 #include "Styles.h"
 
-QString Styles::getStyle(Target const target)
+QString Styles::getStyle(StyleType const type)
 {
     Theme colorTheme;
     switch(mode)
@@ -15,14 +15,14 @@ QString Styles::getStyle(Target const target)
     }
     }
 
-    switch(target)
+    switch(type)
     {
     case BACKGROUND:
     {
-        return QString("background-color: %1;").arg(colorTheme.backgrounds.value(target, "none"));
+        return QString("background-color: %1;").arg(colorTheme.backgrounds.value(type, "none"));
     }
     default:
-        return cellStyle.arg(colorTheme.backgrounds.value(target, "none"), colorTheme.text, colorTheme.border);
+        return cellStyle.arg(colorTheme.backgrounds.value(type, "none"), colorTheme.text, colorTheme.border);
     }
 }
 
