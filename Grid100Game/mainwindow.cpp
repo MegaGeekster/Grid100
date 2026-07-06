@@ -10,6 +10,7 @@
 #include <QSettings>
 #include "settingsdialog.h"
 #include "Resources.h"
+#include "Styles.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -114,7 +115,7 @@ void MainWindow::gridSetup()
     boardWidget = new QWidget(ui->centralwidget);
     gridLayout = new QGridLayout(boardWidget);
 
-    // Samll spaces between cells
+    // Small spaces between cells
     gridLayout->setSpacing(3);
     gridLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -157,8 +158,8 @@ void MainWindow::createGridButtons()
 
     // Initialize cells list
     const int gridSize = gameState.getGridSize();
-    cellButtons.clear();
-    cellButtons.resize(gridSize, std::vector<QPushButton*>(gridSize, nullptr));
+    cells.clear();
+    cells.resize(gridSize, std::vector<Cell>(gridSize, Cell{}));
 
     // Create cells
     for (int row = 0; row < gridSize; row++)
@@ -166,21 +167,21 @@ void MainWindow::createGridButtons()
         for (int col = 0; col < gridSize; col++)
         {
             // Create cell
-            QPushButton *cell = new QPushButton(this);
-            cellButtons[row][col] = cell;
+            QPushButton *button = new QPushButton(this);
 
             // Set size and style
-            cell->setFixedSize(32, 32);
-            // cell->setAlignment(Qt::AlignCenter);
-            cell->setStyleSheet(Styles::cellSetup);
+            button->setFixedSize(32, 32);
+            button->setStyleSheet(Styles::cellSetup);
 
             // Connect button
-            connect(cell, &QPushButton::clicked, this, [=]() {
+            connect(button, &QPushButton::clicked, this, [=]() {
                 onCellClicked(row, col);
             });
 
+            cells[row][col].button = button;
+
             // Add cell to grid
-            gridLayout->addWidget(cell, row, col);
+            gridLayout->addWidget(button, row, col);
         }
     }
     ui->centralwidget->updateGeometry();
@@ -198,7 +199,7 @@ void MainWindow::onCellClicked(int row, int col)
     QPoint pos(row, col);
 
     // Get Legal moves
-    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves(cells);
 
     // Check if cell is a legal move
     bool isLegal = false;
@@ -216,7 +217,7 @@ void MainWindow::onCellClicked(int row, int col)
         return;
     }
 
-    gameState.placeNumber(pos);
+    gameState.placeNumber(pos, &cells[pos.x()][pos.y()]);
     updateGridUI();
     moveHistory.push_back(pos);
     checkGameOver();
@@ -229,7 +230,7 @@ void MainWindow::checkGameOver()
         return;
     }
 
-    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves(cells);
 
     if(!legalMoves.empty())
     {
@@ -270,12 +271,12 @@ void MainWindow::checkGameOver()
 
 void MainWindow::highlightLegalMoves()
 {
-    std::vector<QPoint> legalMoves = gameState.getLegalMoves();
+    std::vector<QPoint> legalMoves = gameState.getLegalMoves(cells);
     for(const auto move : legalMoves)
     {
         int r = move.x();
         int c = move.y();
-        cellButtons[r][c]->setStyleSheet(Styles::getStyle(Styles::StyleType::LEGAL_CELL)
+        cells[r][c].button->setStyleSheet(Styles::getStyle(Styles::StyleType::LEGAL_CELL)
             );
     }
 }
@@ -284,13 +285,22 @@ void MainWindow::restartGame()
 {
     gameState.reset();
     moveHistory ={};
+    // Reset cells
+    for(auto &cellRow : cells)
+    {
+        for(auto &cell : cellRow)
+        {
+            cell.number = 0U;
+            cell.styleType = Styles::StyleType::EMPTY_CELL;
+        }
+    }
     updateGridUI();
 }
 
 void MainWindow::set0GridButton(const QPoint point)
 {
-    cellButtons[point.x()][point.y()]->setText("");
-    cellButtons[point.x()][point.y()]->setStyleSheet(Styles::getStyle(Styles::StyleType::EMPTY_CELL));
+    cells[point.x()][point.y()].button->setText("");
+    cells[point.x()][point.y()].button->setStyleSheet(Styles::getStyle(Styles::StyleType::EMPTY_CELL));
 }
 
 void MainWindow::updateGridUI()
@@ -300,7 +310,7 @@ void MainWindow::updateGridUI()
     {
         for (int col = 0; col < gameState.getGridSize(); col++)
         {
-            int value = gameState.grid[row][col];
+            int value = cells[row][col].number;
 
             if (value == 0)
             {
@@ -308,8 +318,8 @@ void MainWindow::updateGridUI()
             }
             else
             {
-                cellButtons[row][col]->setText(QString::number(value));
-                cellButtons[row][col]->setStyleSheet(Styles::getStyle(Styles::StyleType::OCCUPIED_CELL));
+                cells[row][col].button->setText(QString::number(value));
+                cells[row][col].button->setStyleSheet(Styles::getStyle(Styles::StyleType::OCCUPIED_CELL));
             }
         }
     }
@@ -320,7 +330,7 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cellButtons[currentCell.x()][currentCell.y()]->setStyleSheet(Styles::getStyle(Styles::StyleType::CURRENT_CELL));
+    cells[currentCell.x()][currentCell.y()].button->setStyleSheet(Styles::getStyle(Styles::StyleType::CURRENT_CELL));
 
     highlightLegalMoves();
 }
@@ -373,7 +383,7 @@ void MainWindow::undoLastMove()
     QPoint newPos = moveHistory.empty() ? QPoint{-1, -1} : moveHistory.back();
 
     // Handle game state undo
-    gameState.undoLastMove(lastPos, newPos);
+    gameState.undoLastMove(newPos, &cells[lastPos.x()][lastPos.y()]);
 
     // Reset grid
     updateGridUI();

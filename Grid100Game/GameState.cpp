@@ -1,17 +1,13 @@
+#include "Cell.h"
 #include "GameState.h"
 
 GameState::GameState()
-    : currentNumber(1)
-    , gridSize(10)
+    : currentNumber{1}
+    , gridSize{10}
 {
-    // Initialize grid
-    grid.resize(gridSize);
-    for (auto &row : grid) {
-        row.resize(gridSize, 0);
-    }
 }
 
-std::vector<QPoint> GameState::getLegalMoves()
+std::vector<QPoint> GameState::getLegalMoves(const std::vector<std::vector<Cell>> &grid)
 {
     if(currentNumber == 1)
     {
@@ -28,7 +24,7 @@ std::vector<QPoint> GameState::getLegalMoves()
         int32_t y = currentPos.y() + move.y();
 
         // Validate bounds
-        if(x >= 0 && y >= 0 && x < grid.size() && y < grid.size() && grid[x][y] == 0)
+        if(x >= 0 && y >= 0 && x < gridSize && y < gridSize && grid[x][y].number == 0)
         {
             nextMoves.push_back(QPoint{x, y});
         }
@@ -37,21 +33,20 @@ std::vector<QPoint> GameState::getLegalMoves()
     return nextMoves;
 }
 
-bool GameState::placeNumber(const QPoint &pos)
+void GameState::placeNumber(const QPoint &pos, Cell *cell)
 {
     if (!hasStarted)
     {
         hasStarted = true;
     }
     // Set and update number
-    grid[pos.x()][pos.y()] = currentNumber;
+    cell->number = currentNumber;
     currentNumber++;
 
     currentPos = pos;
-    return true;
 }
 
-bool GameState::isGameOver()
+bool GameState::isGameOver(const std::vector<std::vector<Cell>> &grid)
 {
     int finalNumber = gridSize * gridSize;
     if(currentNumber > finalNumber)
@@ -64,7 +59,7 @@ bool GameState::isGameOver()
         return false;
     }
 
-    std::vector<QPoint> legalMoves = getLegalMoves();
+    std::vector<QPoint> legalMoves = getLegalMoves(grid);
     if(legalMoves.empty())
     {
         return true;
@@ -75,15 +70,14 @@ bool GameState::isGameOver()
 
 void GameState::reset()
 {
-    grid.assign(gridSize, std::vector<int>(gridSize, 0));
     currentNumber = 1;
     hasStarted = false;
     gameOver = false;
 }
 
-void GameState::undoLastMove(const QPoint &lastPosition, const QPoint &newPosition)
+void GameState::undoLastMove(const QPoint &newPosition, Cell *const lastCell)
 {
-    grid[lastPosition.x()][lastPosition.y()] = 0;
+    lastCell->number = 0;
     // Set current number to last number
     currentNumber--;
     // Set current position to previous position

@@ -2,12 +2,12 @@
 #define GAMESTATE_H
 #include <vector>
 #include <QPoint>
+#include <QPushButton>
+#include "Cell.h"
 
 class GameState
 {
 public:
-    std::vector<std::vector<int>> grid; // 0 = empty
-
     void setCurrentNumber(const int val) {currentNumber = val;}
     int getCurrentNumber() {return currentNumber;}
 
@@ -19,12 +19,12 @@ public:
 
     GameState();
 
-    std::vector<QPoint> getLegalMoves();
-    bool placeNumber(const QPoint &pos);
-    bool isGameOver();
+    std::vector<QPoint> getLegalMoves(const std::vector<std::vector<Cell>> &grid);
+    void placeNumber(const QPoint &pos, Cell *cell);
+    bool isGameOver(const std::vector<std::vector<Cell>> &grid);
     void reset();
 
-    void undoLastMove(const QPoint &lastPosition, const QPoint &newPosition);
+    void undoLastMove(const QPoint &newPosition, Cell *const lastCell);
     int calculatePercentage();
     std::pair<QString, QString> getGameOverMessage();
 

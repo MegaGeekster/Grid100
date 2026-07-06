@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QCloseEvent>
 #include <QGridLayout>
+#include "Cell.h"
 #include "Styles.h"
 
 
@@ -43,7 +44,7 @@ private:
 
     Ui::MainWindow *ui;
     GameState gameState;
-    std::vector<std::vector<QPushButton*>> cellButtons;
+    std::vector<std::vector<Cell>> cells;
     bool forceExit = false;
     QGridLayout *gridLayout;
     QWidget *boardWidget;
