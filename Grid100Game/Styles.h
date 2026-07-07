@@ -2,6 +2,7 @@
 #define STYLES_H
 
 #include <QMap>
+#include <QPushButton>
 #include "Resources.h"
 
 class Styles
@@ -23,7 +24,8 @@ public:
         BACKGROUND
     };
 
-    static QString getStyle(StyleType const type);
+    static QString getBackgroundStyle();
+    static void setButtonStyle(QPushButton *const button, StyleType styleType);
 
     inline static QString const cellSetup = "QPushButton {"
                                "border: 1px solid #000000;"

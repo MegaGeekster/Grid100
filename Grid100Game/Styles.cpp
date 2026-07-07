@@ -1,6 +1,6 @@
 #include "Styles.h"
 
-QString Styles::getStyle(StyleType const type)
+QString Styles::getBackgroundStyle()
 {
     Theme colorTheme;
     switch(mode)
@@ -15,15 +15,27 @@ QString Styles::getStyle(StyleType const type)
     }
     }
 
-    switch(type)
+    return QString("background-color: %1;").arg(colorTheme.backgrounds.value(StyleType::BACKGROUND, "none"));
+}
+
+void Styles::setButtonStyle(QPushButton *const button, StyleType styleType)
+{
+    Theme colorTheme;
+    switch(mode)
     {
-    case BACKGROUND:
+    case DARK:
     {
-        return QString("background-color: %1;").arg(colorTheme.backgrounds.value(type, "none"));
+        colorTheme = dark;
+        break;
     }
-    default:
-        return cellStyle.arg(colorTheme.backgrounds.value(type, "none"), colorTheme.text, colorTheme.border);
+    case LIGHT:
+    {
+        colorTheme = light;
+        break;
     }
+    }
+
+    button->setStyleSheet(cellStyle.arg(colorTheme.backgrounds.value(styleType, "none"), colorTheme.text, colorTheme.border));
 }
 
 QString Styles::getModePath(QString const& path, QString const& image)

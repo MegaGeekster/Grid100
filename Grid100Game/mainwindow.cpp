@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Configure the window
     this->setWindowIcon(QIcon(Resources::Icon::game));
     this->setWindowTitle("Grid100");
-    this->setStyleSheet(Styles::getStyle(Styles::StyleType::BACKGROUND));
+    this->setStyleSheet(Styles::getBackgroundStyle());
 
     gameState.reset();
     gridSetup();
@@ -171,7 +171,7 @@ void MainWindow::createGridButtons()
 
             // Set size and style
             button->setFixedSize(32, 32);
-            button->setStyleSheet(Styles::cellSetup);
+            Styles::setButtonStyle(button, Styles::EMPTY_CELL);
 
             // Connect button
             connect(button, &QPushButton::clicked, this, [=]() {
@@ -276,8 +276,7 @@ void MainWindow::highlightLegalMoves()
     {
         int r = move.x();
         int c = move.y();
-        cells[r][c].button->setStyleSheet(Styles::getStyle(Styles::StyleType::LEGAL_CELL)
-            );
+        Styles::setButtonStyle(cells[r][c].button, Styles::StyleType::LEGAL_CELL);
     }
 }
 
@@ -300,7 +299,7 @@ void MainWindow::restartGame()
 void MainWindow::set0GridButton(const QPoint point)
 {
     cells[point.x()][point.y()].button->setText("");
-    cells[point.x()][point.y()].button->setStyleSheet(Styles::getStyle(Styles::StyleType::EMPTY_CELL));
+    Styles::setButtonStyle(cells[point.x()][point.y()].button, Styles::StyleType::EMPTY_CELL);
 }
 
 void MainWindow::updateGridUI()
@@ -319,7 +318,7 @@ void MainWindow::updateGridUI()
             else
             {
                 cells[row][col].button->setText(QString::number(value));
-                cells[row][col].button->setStyleSheet(Styles::getStyle(Styles::StyleType::OCCUPIED_CELL));
+                Styles::setButtonStyle(cells[row][col].button, Styles::StyleType::OCCUPIED_CELL);
             }
         }
     }
@@ -330,7 +329,7 @@ void MainWindow::updateGridUI()
         return;
     }
     QPoint currentCell = gameState.getCurrentPos();
-    cells[currentCell.x()][currentCell.y()].button->setStyleSheet(Styles::getStyle(Styles::StyleType::CURRENT_CELL));
+    Styles::setButtonStyle(cells[currentCell.x()][currentCell.y()].button, Styles::StyleType::CURRENT_CELL);
 
     highlightLegalMoves();
 }
@@ -462,7 +461,7 @@ void MainWindow::handleTheme(Styles::Mode const selectedTheme)
     // Change theme
     Styles::mode = selectedTheme;
     updateGridUI(); // Update button colors
-    this->setStyleSheet(Styles::getStyle(Styles::StyleType::BACKGROUND)); // Update background color
+    this->setStyleSheet(Styles::getBackgroundStyle()); // Update background color
     setButtonIcons();
 
     // Save new theme
