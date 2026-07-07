@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     // Get saved theme
     QSettings settings;
-    Styles::mode = static_cast<Styles::Mode>(settings.value("Theme", static_cast<int>(Styles::Mode::LIGHT)).toInt());
+    Styles::setMode(static_cast<Styles::Mode>(settings.value("Theme", static_cast<int>(Styles::Mode::LIGHT)).toInt()));
     ui->setupUi(this);
 
     // Configure the window
@@ -453,20 +453,20 @@ void MainWindow::handleGridSize(const int selectedGridSize)
 
 void MainWindow::handleTheme(Styles::Mode const selectedTheme)
 {
-    if(selectedTheme == Styles::mode)
+    if(selectedTheme == Styles::getMode())
     {
         return;
     }
 
     // Change theme
-    Styles::mode = selectedTheme;
+    Styles::setMode(selectedTheme);
     updateGridUI(); // Update button colors
     this->setStyleSheet(Styles::getBackgroundStyle()); // Update background color
     setButtonIcons();
 
     // Save new theme
     QSettings settings;
-    settings.setValue("Theme", static_cast<int>(Styles::mode));
+    settings.setValue("Theme", static_cast<int>(Styles::getMode()));
 }
 
 MainWindow::~MainWindow()

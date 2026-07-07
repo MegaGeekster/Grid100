@@ -13,7 +13,6 @@ public:
         LIGHT,
         DARK
     };
-    inline static Mode mode = LIGHT;
 
     enum StyleType
     {
@@ -64,6 +63,16 @@ public:
         return getModePath(Resources::dataPath, Resources::Instructions::instructionsFile);
     }
 
+    inline static Mode getMode()
+    {
+        return mode;
+    }
+
+    inline static void setMode(const Mode newMode)
+    {
+        mode = newMode;
+    }
+
 private:
     static QString getModePath(QString const& path, QString const& image);
 
@@ -104,6 +113,9 @@ private:
                                       "color: %2;"
                                       "border: 1px solid %3;"
                                       "}";
+
+    inline static Mode mode = LIGHT;
+
 
 };
 

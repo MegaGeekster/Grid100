@@ -74,7 +74,7 @@ void SettingsDialog::windowSetup()
     }
 
     // Set default to current theme
-    index = themeCombo->findData(Styles::mode);
+    index = themeCombo->findData(Styles::getMode());
     if(index != -1)
     {
         themeCombo->setCurrentIndex(index);
