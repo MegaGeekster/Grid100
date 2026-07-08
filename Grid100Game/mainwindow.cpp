@@ -63,30 +63,13 @@ void MainWindow::gridSetup()
     restartButton = new QPushButton(this);
 
     // Connect reset Button
-    connect(restartButton, &QPushButton::clicked, this, [=](){
-        if(!gameState.hasStarted)
-        {
-            return;
-        }
-        QMessageBox msg(this);
-        msg.setWindowTitle("Restart Game");
-        msg.setText("Are you sure you want to restart the game?");
-        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msg.setDefaultButton(QMessageBox::No);
-        msg.setWindowIcon(QIcon(Resources::Icon::game));
-
-        if (msg.exec() == QMessageBox::Yes) {
-            restartGame();
-        }
-    });
+    connect(restartButton, &QPushButton::clicked, this, &MainWindow::handleRestart);
 
     // ============ Create undo button ============
     undoButton = new QPushButton(this);
 
     // Connect undo button
-    connect(undoButton, &QPushButton::clicked, this, [=](){
-        undoLastMove();
-    });
+    connect(undoButton, &QPushButton::clicked, this, &MainWindow::undoLastMove);
 
     // ============ Top bar layout ============
     QHBoxLayout *topBarLayout = new QHBoxLayout();
@@ -277,6 +260,24 @@ void MainWindow::highlightLegalMoves()
         int r = move.x();
         int c = move.y();
         Styles::setButtonStyle(cells[r][c].button, Styles::StyleType::LEGAL_CELL);
+    }
+}
+
+void MainWindow::handleRestart()
+{
+    if(!gameState.hasStarted)
+    {
+        return;
+    }
+    QMessageBox msg(this);
+    msg.setWindowTitle("Restart Game");
+    msg.setText("Are you sure you want to restart the game?");
+    msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msg.setDefaultButton(QMessageBox::No);
+    msg.setWindowIcon(QIcon(Resources::Icon::game));
+
+    if (msg.exec() == QMessageBox::Yes) {
+        restartGame();
     }
 }
 

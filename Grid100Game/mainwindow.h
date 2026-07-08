@@ -32,6 +32,7 @@ private:
     void updateGridUI();
     void highlightLegalMoves();
     void checkGameOver();
+    void handleRestart();
     void restartGame();
     void closeEvent(QCloseEvent *event) override;
     void set0GridButton(const QPoint point);
