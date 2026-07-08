@@ -31,7 +31,8 @@ private:
     void onCellClicked(int row, int col);
     void updateGridUI();
     void highlightLegalMoves();
-    void checkGameOver();
+    bool isGameOver();
+    void handleGameOver();
     void handleRestart();
     void restartGame();
     void closeEvent(QCloseEvent *event) override;

@@ -153,6 +153,7 @@ void MainWindow::createGridButtons()
                 onCellClicked(row, col);
             });
 
+            // Add button to cell
             cells[row][col].button = button;
 
             // Add cell to grid
@@ -195,23 +196,32 @@ void MainWindow::onCellClicked(int row, int col)
     gameState.placeNumber(pos, &cells[pos.x()][pos.y()]);
     updateGridUI();
     moveHistory.push_back(pos);
-    checkGameOver();
+
+    if(isGameOver())
+    {
+        gameState.gameOver = true;
+        handleGameOver();
+    }
 }
 
-void MainWindow::checkGameOver()
+bool MainWindow::isGameOver()
 {
     if(!gameState.hasStarted)
     {
-        return;
+        return false;
     }
 
     std::vector<QPoint> legalMoves = gameState.getLegalMoves(cells);
 
-    if(!legalMoves.empty())
+    if(legalMoves.empty())
     {
-        return;
+        return true;
     }
-    gameState.gameOver = true;
+    return false;
+}
+
+void MainWindow::handleGameOver()
+{
     std::pair<QString, QString> message = gameState.getGameOverMessage();
 
     // Set game over dialog
