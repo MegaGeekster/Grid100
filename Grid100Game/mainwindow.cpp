@@ -110,18 +110,10 @@ void MainWindow::gridSetup()
 
 void MainWindow::setButtonIcons()
 {
-    // Undo
-    undoButton->setIcon(QIcon(Styles::getUndoIcon()));
-    undoButton->setIconSize(QSize(24,24));
-    // Instructions
-    instructionsButton->setIcon(QIcon(Styles::getInstructionsIcon()));
-    instructionsButton->setIconSize(QSize(24, 24));
-    // Settings
-    settingsButton->setIcon(QIcon(Styles::getSettingsIcon()));
-    settingsButton->setIconSize(QSize(24, 24));
-    // Restart
-    restartButton->setIcon(QIcon(Styles::getRestartIcon()));
-    restartButton->setIconSize(QSize(24,24));
+    Styles::setButtonIcon(undoButton, Styles::getUndoIcon());
+    Styles::setButtonIcon(instructionsButton, Styles::getInstructionsIcon());
+    Styles::setButtonIcon(settingsButton, Styles::getSettingsIcon());
+    Styles::setButtonIcon(restartButton, Styles::getRestartIcon());
 }
 
 void MainWindow::createGridButtons()

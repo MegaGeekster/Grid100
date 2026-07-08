@@ -38,6 +38,13 @@ void Styles::setButtonStyle(QPushButton *const button, StyleType styleType)
     button->setStyleSheet(cellStyle.arg(colorTheme.backgrounds.value(styleType, "none"), colorTheme.text, colorTheme.border));
 }
 
+void Styles::setButtonIcon(QPushButton *const button, QString const &icon)
+{
+    button->setIcon(QIcon(icon));
+    button->setIconSize(QSize(24, 24));
+}
+
+
 QString Styles::getModePath(QString const& path, QString const& image)
 {
     QString folderName = "";

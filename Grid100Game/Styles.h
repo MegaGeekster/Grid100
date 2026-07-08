@@ -25,6 +25,7 @@ public:
 
     static QString getBackgroundStyle();
     static void setButtonStyle(QPushButton *const button, StyleType styleType);
+    static void setButtonIcon(QPushButton *const button, QString const &icon);
 
     inline static QString const cellSetup = "QPushButton {"
                                "border: 1px solid #000000;"
