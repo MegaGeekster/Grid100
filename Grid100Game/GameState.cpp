@@ -14,7 +14,7 @@ std::vector<QPoint> GameState::getLegalMoves(const std::vector<std::vector<Cell>
         return {};
     }
 
-    // Return moves
+    // Moves to return
     std::vector<QPoint> nextMoves;
 
     for(const auto &move : moves)

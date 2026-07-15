@@ -90,10 +90,10 @@ void SettingsDialog::windowSetup()
 
 void SettingsDialog::handleGridSize()
 {
-
     // Get the chosen grid size
     selectedGridSize = gridSizeCombo->currentData().toInt();
 
+    // Handle custom size
     if(selectedGridSize == -1)
     {
         int const value = customSizeBox->value();

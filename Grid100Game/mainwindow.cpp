@@ -124,7 +124,8 @@ void MainWindow::createGridButtons()
         QLayoutItem* child;
         while ((child = gridLayout->takeAt(0)) != nullptr)
         {
-            if(QWidget* widget = child->widget()) {
+            if(QWidget* widget = child->widget())
+            {
                 widget->deleteLater();  // safely delete old buttons
             }
             delete child;
@@ -222,6 +223,7 @@ bool MainWindow::isGameOver()
 
 void MainWindow::handleGameOver()
 {
+    // Get message to display
     std::pair<QString, QString> message = gameState.getGameOverMessage();
 
     // Set game over dialog
@@ -238,6 +240,7 @@ void MainWindow::handleGameOver()
 
     msg.exec();
 
+    // Connect buttons
     if(msg.clickedButton() == undoBtn)
     {
         gameState.gameOver = false;
@@ -259,9 +262,9 @@ void MainWindow::highlightLegalMoves()
     std::vector<QPoint> legalMoves = gameState.getLegalMoves(cells);
     for(const auto move : legalMoves)
     {
-        int r = move.x();
-        int c = move.y();
-        Styles::setButtonStyle(cells[r][c].button, Styles::StyleType::LEGAL_CELL);
+        int x = move.x();
+        int y = move.y();
+        Styles::setButtonStyle(cells[x][y].button, Styles::StyleType::LEGAL_CELL);
     }
 }
 
@@ -271,6 +274,8 @@ void MainWindow::handleRestart()
     {
         return;
     }
+
+    // Display confirmation message
     QMessageBox msg(this);
     msg.setWindowTitle("Restart Game");
     msg.setText("Are you sure you want to restart the game?");
@@ -278,7 +283,8 @@ void MainWindow::handleRestart()
     msg.setDefaultButton(QMessageBox::No);
     msg.setWindowIcon(QIcon(Resources::Icon::game));
 
-    if (msg.exec() == QMessageBox::Yes) {
+    if (msg.exec() == QMessageBox::Yes)
+    {
         restartGame();
     }
 }
